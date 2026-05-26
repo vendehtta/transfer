@@ -2087,7 +2087,7 @@ const App = () => {
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 8px 0', fontSize: 11, color: 'var(--ink-4)' }}>
             <span className="mono">Goal · 30 min/day</span>
-            <span className="mono">14:21</span>
+            <LiveClock />
           </div>
         </div>
       </aside>
@@ -2109,6 +2109,204 @@ const App = () => {
 };
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<!-- ── LIVE CLOCK ── -->
+<script type="text/babel">
+const LiveClock = () => {
+  const [time, setTime] = React.useState(() => new Date());
+  React.useEffect(() => {
+    const id = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+  const h = String(time.getHours()).padStart(2, '0');
+  const m = String(time.getMinutes()).padStart(2, '0');
+  return <span className="mono">{h}:{m}</span>;
+};
+window.LiveClock = LiveClock;
+</script>
+
+<!-- ── GITHUB SYNC ── -->
+<script type="text/babel">
+const GH_TOKEN_KEY = 'sumi.gh.token';
+const GH_GIST_KEY  = 'sumi.gh.gist';
+
+const GitHubSync = () => {
+  const [token, setToken]   = React.useState(() => localStorage.getItem(GH_TOKEN_KEY) || '');
+  const [status, setStatus] = React.useState('');
+  const [saving, setSaving] = React.useState(false);
+
+  const allData = () => ({
+    exported: new Date().toISOString(),
+    srs:      (() => { try { return JSON.parse(localStorage.getItem('sumi.n3.srs.v1') || '{}'); } catch { return {}; } })(),
+    personal: (() => { try { return JSON.parse(localStorage.getItem('sumi.n3.personal.v1') || '{}'); } catch { return {}; } })(),
+    userDeck: (() => { try { return JSON.parse(localStorage.getItem('sumi.n3.userdeck.v1') || '[]'); } catch { return []; } })(),
+    app: 'sumi.n3', version: 2,
+  });
+
+  const saveToken = (t) => { setToken(t); localStorage.setItem(GH_TOKEN_KEY, t); };
+
+  const push = async () => {
+    if (!token) { setStatus('⚠ Enter a GitHub token first.'); return; }
+    setSaving(true); setStatus('Saving…');
+    try {
+      const content = JSON.stringify(allData(), null, 2);
+      const existingGist = localStorage.getItem(GH_GIST_KEY);
+      let res;
+      if (existingGist) {
+        res = await fetch(`https://api.github.com/gists/${existingGist}`, {
+          method: 'PATCH',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ files: { 'sumi-n3-progress.json': { content } } }),
+        });
+      } else {
+        res = await fetch('https://api.github.com/gists', {
+          method: 'POST',
+          headers: { Authorization: `token ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ description: 'Sumi N3 progress', public: false, files: { 'sumi-n3-progress.json': { content } } }),
+        });
+      }
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      localStorage.setItem(GH_GIST_KEY, data.id);
+      setStatus('✓ Saved to GitHub gist');
+    } catch (e) {
+      setStatus('✗ Error: ' + e.message);
+    }
+    setSaving(false);
+  };
+
+  const pull = async () => {
+    if (!token) { setStatus('⚠ Enter a GitHub token first.'); return; }
+    const gistId = localStorage.getItem(GH_GIST_KEY);
+    if (!gistId) { setStatus('⚠ No saved gist found. Save first.'); return; }
+    setSaving(true); setStatus('Loading…');
+    try {
+      const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+        headers: { Authorization: `token ${token}` },
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const gist = await res.json();
+      const content = gist.files['sumi-n3-progress.json']?.content;
+      if (!content) throw new Error('File not found in gist');
+      const data = JSON.parse(content);
+      if (data.srs)      localStorage.setItem('sumi.n3.srs.v1',       JSON.stringify(data.srs));
+      if (data.personal) localStorage.setItem('sumi.n3.personal.v1',  JSON.stringify(data.personal));
+      if (data.userDeck) localStorage.setItem('sumi.n3.userdeck.v1',  JSON.stringify(data.userDeck));
+      setStatus('✓ Progress restored — reload to apply');
+    } catch (e) {
+      setStatus('✗ Error: ' + e.message);
+    }
+    setSaving(false);
+  };
+
+  return (
+    <div style={{ marginTop: 22 }}>
+      <div className="label" style={{ marginBottom: 8 }}>GitHub sync</div>
+      <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', marginBottom: 14, fontSize: 13 }}>
+        Store progress in a private GitHub Gist — access it from any device.
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 5 }}>GITHUB TOKEN (stored locally)</div>
+        <input
+          type="password"
+          value={token}
+          onChange={e => saveToken(e.target.value)}
+          placeholder="ghp_..."
+          style={{ width: '100%', padding: '10px 12px', border: '1px solid var(--line)', background: 'var(--paper-light)', fontFamily: 'var(--mono)', fontSize: 12, borderRadius: 6, color: 'var(--ink)', outline: 'none' }}
+        />
+        <div style={{ fontSize: 11, color: 'var(--ink-4)', marginTop: 4 }}>
+          Needs <span className="mono">gist</span> scope. <a href="https://github.com/settings/tokens" target="_blank" style={{ color: 'var(--indigo)' }}>Create token →</a>
+        </div>
+      </div>
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+        <button className="btn btn-primary" onClick={push} disabled={saving}>↑ Save to GitHub</button>
+        <button className="btn" onClick={pull} disabled={saving}>↓ Load from GitHub</button>
+        {status && <span className="en-disp" style={{ fontStyle: 'italic', fontSize: 13, color: status.startsWith('✓') ? 'var(--moss)' : status.startsWith('✗') ? 'var(--rouge)' : 'var(--ink-4)' }}>{status}</span>}
+      </div>
+    </div>
+  );
+};
+window.GitHubSync = GitHubSync;
+</script>
+
+<!-- ── PATCH ImportExport to include GitHubSync ── -->
+<script type="text/babel">
+const _OrigImportExport = window.ImportExport;
+window.ImportExport = () => {
+  const orig = _OrigImportExport ? React.createElement(_OrigImportExport) : null;
+  return (
+    <div>
+      {orig}
+      <div className="card raised" style={{ marginTop: 22 }}>
+        <window.GitHubSync />
+      </div>
+    </div>
+  );
+};
+</script>
+
+<!-- ── CHERRY BLOSSOMS ── -->
+<style>
+.sakura-petal {
+  position: fixed;
+  top: -30px;
+  pointer-events: none;
+  z-index: 998;
+  opacity: 0;
+  animation: sakura-fall linear infinite;
+}
+@keyframes sakura-fall {
+  0%   { transform: translateY(0) rotate(0deg) translateX(0);   opacity: 0; }
+  5%   { opacity: 0.85; }
+  90%  { opacity: 0.7; }
+  100% { transform: translateY(105vh) rotate(720deg) translateX(var(--drift)); opacity: 0; }
+}
+</style>
+<script>
+(function() {
+  const COLORS = ['#f9b8c4','#f7c5d0','#f4a7b9','#fbd0d8','#f8bcc8','#ffe0e8'];
+  const SVG = (color) => `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18">
+    <ellipse cx="9" cy="4.5" rx="3.5" ry="4.5" fill="${color}" transform="rotate(0,9,9)" opacity=".92"/>
+    <ellipse cx="9" cy="4.5" rx="3.5" ry="4.5" fill="${color}" transform="rotate(72,9,9)" opacity=".92"/>
+    <ellipse cx="9" cy="4.5" rx="3.5" ry="4.5" fill="${color}" transform="rotate(144,9,9)" opacity=".92"/>
+    <ellipse cx="9" cy="4.5" rx="3.5" ry="4.5" fill="${color}" transform="rotate(216,9,9)" opacity=".92"/>
+    <ellipse cx="9" cy="4.5" rx="3.5" ry="4.5" fill="${color}" transform="rotate(288,9,9)" opacity=".92"/>
+    <circle cx="9" cy="9" r="2" fill="#f9e0e8"/>
+  </svg>`;
+
+  const PETAL_COUNT = 18;
+  const petals = [];
+
+  function createPetal() {
+    const el = document.createElement('div');
+    el.className = 'sakura-petal';
+    const color = COLORS[Math.floor(Math.random() * COLORS.length)];
+    const size = 10 + Math.random() * 14;
+    el.innerHTML = SVG(color);
+    el.querySelector('svg').style.width = size + 'px';
+    el.querySelector('svg').style.height = size + 'px';
+    el.style.left = (Math.random() * 105 - 2) + 'vw';
+    const duration = 6 + Math.random() * 10;
+    const delay = Math.random() * 12;
+    const drift = (Math.random() * 120 - 60);
+    el.style.setProperty('--drift', drift + 'px');
+    el.style.animationDuration = duration + 's';
+    el.style.animationDelay = delay + 's';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  function init() {
+    for (let i = 0; i < PETAL_COUNT; i++) petals.push(createPetal());
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
 </script>
 
 </body>
