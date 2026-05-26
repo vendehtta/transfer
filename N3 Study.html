@@ -1,0 +1,2115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>墨 · N3 Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700;800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper:        #ece4d3;
+    --paper-warm:   #e6dcc6;
+    --paper-light:  #f4eddd;
+    --card:         #f7f1e1;
+    --card-raised:  #fbf6e8;
+    --ink:          #1a1814;
+    --ink-2:        #36322a;
+    --ink-3:        #5b5448;
+    --ink-4:        #8a8170;
+    --line:         #cfc3a8;
+    --line-soft:    #ddd1b6;
+    --indigo:       #3b5573;
+    --indigo-soft:  #5e7591;
+    --persimmon:    #b3563a;
+    --moss:         #6c7a4a;
+    --gold:         #a8884b;
+    --rouge:        #8a3a3a;
+
+    --serif-jp: "Shippori Mincho", "Noto Serif JP", "Yu Mincho", serif;
+    --serif-en: "Newsreader", "EB Garamond", Georgia, serif;
+    --sans:     "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+    --mono:     "JetBrains Mono", ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background-image:
+      radial-gradient(rgba(120,100,70,.06) 1px, transparent 1.2px),
+      radial-gradient(rgba(120,100,70,.04) 1px, transparent 1.2px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+    opacity: .9;
+    mix-blend-mode: multiply;
+  }
+
+  ::selection { background: #1a18141a; }
+
+  .jp { font-family: var(--serif-jp); font-weight: 500; }
+  .jp-disp { font-family: var(--serif-jp); font-weight: 600; letter-spacing: .02em; }
+  .en-disp { font-family: var(--serif-en); font-weight: 400; letter-spacing: -.01em; }
+  .mono { font-family: var(--mono); font-size: 11px; letter-spacing: .04em; }
+  .label {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+  }
+
+  ruby rt {
+    font-family: var(--serif-jp);
+    font-size: .42em;
+    font-weight: 400;
+    color: var(--ink-4);
+    letter-spacing: 0;
+  }
+
+  button {
+    font: inherit;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    color: inherit;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--card);
+    color: var(--ink-2);
+    font-weight: 500;
+    font-size: 13px;
+    transition: all .15s ease;
+  }
+  .btn:hover { border-color: var(--ink-4); background: var(--card-raised); }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .btn-primary:hover { background: var(--ink-2); border-color: var(--ink-2); }
+  .btn-ghost { background: transparent; border-color: transparent; color: var(--ink-3); }
+  .btn-ghost:hover { background: var(--paper-warm); color: var(--ink); border-color: transparent; }
+
+  .enso {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2.5px solid var(--ink);
+    border-right-color: transparent;
+    border-bottom-color: rgba(26,24,20,.35);
+    transform: rotate(-22deg);
+    flex-shrink: 0;
+  }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+
+  .app {
+    display: grid;
+    grid-template-columns: 232px 1fr;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  .sidebar {
+    border-right: 1px solid var(--line);
+    background: var(--paper-warm);
+    padding: 28px 18px 22px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 6px 26px;
+    border-bottom: 1px dashed var(--line);
+    margin-bottom: 18px;
+  }
+  .brand-name {
+    font-family: var(--serif-jp);
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: .04em;
+  }
+  .brand-name .sub {
+    display: block;
+    font-family: var(--serif-en);
+    font-size: 11px;
+    font-style: italic;
+    color: var(--ink-4);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+  .nav { display: flex; flex-direction: column; gap: 2px; }
+  .nav-section {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .22em;
+    color: var(--ink-4);
+    padding: 18px 12px 8px;
+    text-transform: uppercase;
+  }
+  .nav-item {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    color: var(--ink-3);
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .12s ease;
+  }
+  .nav-item:hover { background: rgba(26,24,20,.05); color: var(--ink); }
+  .nav-item.active { background: var(--ink); color: var(--paper-light); }
+  .nav-item .glyph {
+    font-family: var(--serif-jp);
+    font-size: 18px;
+    text-align: center;
+    line-height: 1;
+    font-weight: 500;
+  }
+  .nav-item.active .glyph { color: var(--paper-light); }
+  .nav-item .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--paper);
+    color: var(--ink-3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--line);
+  }
+  .nav-item.active .badge {
+    background: rgba(255,255,255,.1);
+    color: var(--paper-light);
+    border-color: transparent;
+  }
+
+  .sidebar-footer {
+    margin-top: auto;
+    padding-top: 16px;
+    border-top: 1px dashed var(--line);
+  }
+  .streak-card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .streak-num {
+    font-family: var(--serif-en);
+    font-size: 32px;
+    line-height: 1;
+    font-weight: 500;
+    color: var(--persimmon);
+  }
+  .streak-label {
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.3;
+  }
+  .streak-label b { color: var(--ink); display: block; font-weight: 600; }
+
+  .main {
+    padding: 36px 56px 80px;
+    max-width: 1280px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .page-title {
+    font-family: var(--serif-en);
+    font-size: 44px;
+    line-height: 1;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: -.01em;
+  }
+  .page-title .kanji {
+    font-family: var(--serif-jp);
+    font-weight: 500;
+    margin-right: 14px;
+    color: var(--ink-2);
+  }
+  .page-sub {
+    font-family: var(--serif-en);
+    font-style: italic;
+    color: var(--ink-4);
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 22px;
+  }
+  .card.raised {
+    background: var(--card-raised);
+    box-shadow:
+      0 1px 0 rgba(26,24,20,.02),
+      0 8px 28px -16px rgba(26,24,20,.18);
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+</head>
+<body>
+<div id="root"></div>
+
+<!-- ── DATA ── -->
+<script>
+window.N3_VOCAB = [
+  { jp: '横断歩道', kana: 'おうだんほどう', en: 'pedestrian crossing', pos: 'noun', ex: { jp: '横断歩道を渡りましょう。', en: "Let's cross at the crosswalk." } },
+  { jp: '相変わらず', kana: 'あいかわらず', en: 'as usual; as always', pos: 'adverb', ex: { jp: '彼は相変わらず元気だ。', en: 'He is as energetic as ever.' } },
+  { jp: '辺り', kana: 'あたり', en: 'vicinity; around', pos: 'noun', ex: { jp: 'この辺りは静かだ。', en: 'It is quiet around here.' } },
+  { jp: '与える', kana: 'あたえる', en: 'to give; to grant', pos: 'verb', ex: { jp: '影響を与える。', en: 'To exert an influence.' } },
+  { jp: '溢れる', kana: 'あふれる', en: 'to overflow; to brim with', pos: 'verb', ex: { jp: '涙が溢れた。', en: 'Tears overflowed.' } },
+  { jp: '応援', kana: 'おうえん', en: 'support; cheering', pos: 'noun', ex: { jp: 'チームを応援する。', en: 'To cheer for the team.' } },
+  { jp: '思いつく', kana: 'おもいつく', en: 'to think up; to hit upon', pos: 'verb', ex: { jp: 'いいアイデアを思いついた。', en: 'I hit on a good idea.' } },
+  { jp: '解決', kana: 'かいけつ', en: 'solution; resolution', pos: 'noun', ex: { jp: '問題を解決する。', en: 'To solve a problem.' } },
+  { jp: '輝く', kana: 'かがやく', en: 'to shine; to sparkle', pos: 'verb', ex: { jp: '星が輝いている。', en: 'The stars are shining.' } },
+  { jp: '感心', kana: 'かんしん', en: 'admiration; being impressed', pos: 'noun', ex: { jp: '彼の努力に感心した。', en: 'I was impressed by his effort.' } },
+  { jp: '苦手', kana: 'にがて', en: 'not good at; weak point', pos: 'na-adj', ex: { jp: '数学は苦手だ。', en: 'I am not good at math.' } },
+  { jp: '逆', kana: 'ぎゃく', en: 'reverse; opposite', pos: 'noun', ex: { jp: '逆の方向に進む。', en: 'To go in the opposite direction.' } },
+  { jp: '機会', kana: 'きかい', en: 'opportunity; chance', pos: 'noun', ex: { jp: 'いい機会だ。', en: 'It is a good opportunity.' } },
+  { jp: '禁止', kana: 'きんし', en: 'prohibition; ban', pos: 'noun', ex: { jp: '駐車禁止。', en: 'No parking.' } },
+  { jp: '偶然', kana: 'ぐうぜん', en: 'by chance; coincidence', pos: 'adverb', ex: { jp: '偶然友達に会った。', en: 'I met a friend by chance.' } },
+  { jp: '配る', kana: 'くばる', en: 'to distribute; to hand out', pos: 'verb', ex: { jp: 'プリントを配る。', en: 'To hand out printouts.' } },
+  { jp: '腰', kana: 'こし', en: 'lower back; hips', pos: 'noun', ex: { jp: '腰が痛い。', en: 'My back hurts.' } },
+  { jp: '異なる', kana: 'ことなる', en: 'to differ; to vary', pos: 'verb', ex: { jp: '意見が異なる。', en: 'Opinions differ.' } },
+  { jp: '断る', kana: 'ことわる', en: 'to refuse; to decline', pos: 'verb', ex: { jp: '誘いを断る。', en: 'To turn down an invitation.' } },
+  { jp: '盛ん', kana: 'さかん', en: 'thriving; popular', pos: 'na-adj', ex: { jp: 'サッカーが盛んだ。', en: 'Soccer is popular.' } },
+  { jp: '騒ぐ', kana: 'さわぐ', en: 'to make noise; to be noisy', pos: 'verb', ex: { jp: '子供が騒いでいる。', en: 'The children are being noisy.' } },
+  { jp: '叱る', kana: 'しかる', en: 'to scold', pos: 'verb', ex: { jp: '先生に叱られた。', en: 'I was scolded by the teacher.' } },
+  { jp: '湿気', kana: 'しっけ', en: 'humidity; moisture', pos: 'noun', ex: { jp: '湿気が多い。', en: 'There is a lot of humidity.' } },
+  { jp: '締め切り', kana: 'しめきり', en: 'deadline', pos: 'noun', ex: { jp: '締め切りに間に合う。', en: 'To make the deadline.' } },
+  { jp: '少なくとも', kana: 'すくなくとも', en: 'at least', pos: 'adverb', ex: { jp: '少なくとも一週間かかる。', en: 'It will take at least a week.' } },
+  { jp: '勧める', kana: 'すすめる', en: 'to recommend', pos: 'verb', ex: { jp: '本を勧める。', en: 'To recommend a book.' } },
+  { jp: '相談', kana: 'そうだん', en: 'consultation; discussion', pos: 'noun', ex: { jp: '友達に相談する。', en: 'To consult a friend.' } },
+  { jp: '互いに', kana: 'たがいに', en: 'mutually; each other', pos: 'adverb', ex: { jp: '互いに助け合う。', en: 'To help each other.' } },
+  { jp: '貯金', kana: 'ちょきん', en: 'savings; deposit', pos: 'noun', ex: { jp: '毎月貯金する。', en: 'To save money every month.' } },
+  { jp: '伝える', kana: 'つたえる', en: 'to convey; to report', pos: 'verb', ex: { jp: '気持ちを伝える。', en: 'To convey one’s feelings.' } },
+  { jp: '出来事', kana: 'できごと', en: 'event; incident', pos: 'noun', ex: { jp: '今日の出来事。', en: "Today's events." } },
+  { jp: '泥', kana: 'どろ', en: 'mud', pos: 'noun', ex: { jp: '靴に泥がつく。', en: 'Mud got on my shoes.' } },
+  { jp: '懐かしい', kana: 'なつかしい', en: 'nostalgic; dear', pos: 'i-adj', ex: { jp: '懐かしい思い出。', en: 'Fond memories.' } },
+  { jp: '握る', kana: 'にぎる', en: 'to grasp; to grip', pos: 'verb', ex: { jp: '手を握る。', en: 'To hold hands.' } },
+  { jp: '熱中', kana: 'ねっちゅう', en: 'absorption; enthusiasm', pos: 'noun', ex: { jp: 'ゲームに熱中する。', en: 'To be absorbed in a game.' } },
+  { jp: '残念', kana: 'ざんねん', en: 'regrettable; too bad', pos: 'na-adj', ex: { jp: '残念な結果。', en: 'A disappointing result.' } }
+];
+
+window.N3_KANJI = [
+  { c: '横', on: 'オウ', kun: 'よこ', en: 'sideways, horizontal', strokes: 15, words: ['横断', '横顔', '横道'] },
+  { c: '相', on: 'ソウ・ショウ', kun: 'あい', en: 'mutual, phase, aspect', strokes: 9, words: ['相手', '相談', '首相'] },
+  { c: '与', on: 'ヨ', kun: 'あた(える)', en: 'give, award, provide', strokes: 3, words: ['与える', '関与', '給与'] },
+  { c: '解', on: 'カイ・ゲ', kun: 'と(く)', en: 'solve, untie, explain', strokes: 13, words: ['解決', '理解', '解放'] },
+  { c: '輝', on: 'キ', kun: 'かがや(く)', en: 'radiance, shine', strokes: 15, words: ['輝く', '光輝', '輝石'] },
+  { c: '感', on: 'カン', kun: '—', en: 'feeling, emotion, sense', strokes: 13, words: ['感動', '感心', '感謝'] },
+  { c: '逆', on: 'ギャク', kun: 'さか・さか(らう)', en: 'reverse, oppose', strokes: 9, words: ['逆転', '反逆', '逆風'] },
+  { c: '機', on: 'キ', kun: 'はた', en: 'machine, opportunity', strokes: 16, words: ['機会', '機械', '飛行機'] },
+  { c: '禁', on: 'キン', kun: '—', en: 'prohibit, forbid', strokes: 13, words: ['禁止', '禁煙', '解禁'] },
+  { c: '偶', on: 'グウ', kun: 'たま', en: 'pair, even, accidental', strokes: 11, words: ['偶然', '偶数', '配偶'] },
+  { c: '配', on: 'ハイ', kun: 'くば(る)', en: 'distribute, allot', strokes: 10, words: ['配る', '心配', '配達'] },
+  { c: '腰', on: 'ヨウ', kun: 'こし', en: 'lower back, hip, waist', strokes: 13, words: ['腰痛', '本腰', '弱腰'] },
+  { c: '異', on: 'イ', kun: 'こと', en: 'differ, strange, unusual', strokes: 11, words: ['異なる', '異常', '差異'] },
+  { c: '断', on: 'ダン', kun: 'た(つ)・ことわ(る)', en: 'sever, decline, decide', strokes: 11, words: ['断る', '判断', '横断'] },
+  { c: '盛', on: 'セイ・ジョウ', kun: 'も(る)・さか(ん)', en: 'prosperous, heap up', strokes: 11, words: ['盛ん', '繁盛', '盛大'] },
+  { c: '騒', on: 'ソウ', kun: 'さわ(ぐ)', en: 'make noise, disturb', strokes: 18, words: ['騒音', '騒動', '物騒'] },
+  { c: '叱', on: 'シツ', kun: 'しか(る)', en: 'scold, reprove', strokes: 5, words: ['叱る', '叱責'] },
+  { c: '締', on: 'テイ', kun: 'し(める)', en: 'tighten, fasten', strokes: 15, words: ['締切', '締結', '引き締め'] },
+  { c: '勧', on: 'カン', kun: 'すす(める)', en: 'recommend, advise', strokes: 13, words: ['勧める', '勧誘', '勧告'] },
+  { c: '互', on: 'ゴ', kun: 'たが(い)', en: 'mutually, reciprocal', strokes: 4, words: ['互いに', '相互', '交互'] },
+  { c: '貯', on: 'チョ', kun: 'たくわ(える)', en: 'save, store, lay aside', strokes: 12, words: ['貯金', '貯蔵', '貯水'] },
+  { c: '伝', on: 'デン', kun: 'つた(える)', en: 'transmit, report, communicate', strokes: 6, words: ['伝える', '手伝う', '伝統'] },
+  { c: '握', on: 'アク', kun: 'にぎ(る)', en: 'grasp, hold, take hold', strokes: 12, words: ['握手', '握る', '把握'] },
+  { c: '熱', on: 'ネツ', kun: 'あつ(い)', en: 'heat, fever, mania', strokes: 15, words: ['熱中', '情熱', '熱心'] },
+  { c: '残', on: 'ザン', kun: 'のこ(る)', en: 'remainder, remain, leftover', strokes: 10, words: ['残念', '残業', '残高'] }
+];
+
+window.N3_GRAMMAR = [
+  { pattern: '〜うちに', meaning: 'while; before (it becomes…)', explanation: 'Used to express doing something while a state/condition still holds, or before it changes. Often paired with negative forms: 〜ないうちに ("before…").', forms: ['Verb dict. + うちに', 'い-adj + うちに', 'な-adj + な うちに', 'Noun + の うちに'], examples: [ { jp: '若いうちに、いろいろなことに挑戦したい。', en: 'I want to take on many things while I am young.' }, { jp: '忘れないうちにメモしておこう。', en: 'I should jot it down before I forget.' } ] },
+  { pattern: '〜おかげで', meaning: 'thanks to; because of (positive)', explanation: 'Expresses a positive result thanks to some cause. Compare with 〜せいで, which is for negative results.', forms: ['Verb plain + おかげで', 'い-adj + おかげで', 'な-adj + な おかげで', 'Noun + の おかげで'], examples: [ { jp: '先生のおかげで合格できました。', en: 'Thanks to my teacher I was able to pass.' }, { jp: '雨が降ったおかげで涼しくなった。', en: 'Thanks to the rain it became cool.' } ] },
+  { pattern: '〜せいで', meaning: 'because of; due to (negative)', explanation: 'Used to blame an unwanted result on a cause. The opposite tone of 〜おかげで.', forms: ['Verb plain + せいで', 'い-adj + せいで', 'な-adj + な せいで', 'Noun + の せいで'], examples: [ { jp: '寝坊したせいで電車に乗り遅れた。', en: 'I missed the train because I overslept.' }, { jp: '雨のせいで試合が中止になった。', en: 'The match was cancelled because of the rain.' } ] },
+  { pattern: '〜ばかりだ', meaning: 'keeps only…; getting worse and worse', explanation: 'With verbs in dictionary form, expresses that a situation only continues in one direction (often negative).', forms: ['Verb dict. + ばかりだ'], examples: [ { jp: '物価は上がるばかりだ。', en: 'Prices just keep going up.' }, { jp: '彼の状態は悪くなるばかりだ。', en: 'His condition only gets worse.' } ] },
+  { pattern: '〜たばかり', meaning: 'just did (something)', explanation: 'Indicates the speaker feels an action happened very recently. Subjective — distinct from 〜たところ which is objectively just-now.', forms: ['Verb た-form + ばかり'], examples: [ { jp: '日本に来たばかりです。', en: 'I just arrived in Japan.' }, { jp: '食べたばかりなのにもうお腹がすいた。', en: "I just ate but I'm already hungry." } ] },
+  { pattern: '〜ように', meaning: 'so that; in order that', explanation: 'Expresses purpose with a state/ability verb. Compare with 〜ために which uses volitional actions.', forms: ['Verb (potential / negative / state) + ように'], examples: [ { jp: '聞こえるように大きい声で話してください。', en: 'Please speak loudly so I can hear.' }, { jp: '忘れないようにメモする。', en: 'I take notes so I won’t forget.' } ] },
+  { pattern: '〜ようにする', meaning: 'to try to; to make a point of', explanation: 'Expresses making an effort to do (or not do) something habitually.', forms: ['Verb dict. / ない-form + ようにする'], examples: [ { jp: '毎日運動するようにしている。', en: 'I make a point of exercising every day.' }, { jp: '甘いものを食べないようにしている。', en: 'I try not to eat sweets.' } ] },
+  { pattern: '〜ようになる', meaning: 'to come to (do); to reach the point where', explanation: 'Marks a change to a new ability or habit over time.', forms: ['Verb dict. / potential + ようになる'], examples: [ { jp: '日本語が話せるようになった。', en: 'I have become able to speak Japanese.' }, { jp: '最近、早く起きるようになった。', en: 'Lately I have started waking up early.' } ] },
+  { pattern: '〜さえ〜ば', meaning: 'if only…; as long as…', explanation: 'Sets up a single sufficient condition: if just this one thing is true, the result follows.', forms: ['Noun + さえ + Verb ば-form', 'Verb stem + さえすれば'], examples: [ { jp: 'お金さえあれば旅行に行ける。', en: 'As long as I have money I can travel.' }, { jp: '練習さえすれば上手になる。', en: "If you just practice, you'll get good." } ] },
+  { pattern: '〜について', meaning: 'about; concerning', explanation: 'Marks the topic of discussion, study, or thought.', forms: ['Noun + について'], examples: [ { jp: '日本の文化について研究している。', en: 'I am researching Japanese culture.' }, { jp: 'その問題について話しましょう。', en: "Let's talk about that issue." } ] },
+  { pattern: '〜にとって', meaning: 'for; from the perspective of', explanation: 'Marks the viewpoint from which something is judged.', forms: ['Noun + にとって'], examples: [ { jp: '私にとって家族が一番大切だ。', en: 'For me, family is most important.' }, { jp: '学生にとってこの本は難しい。', en: 'For students this book is difficult.' } ] },
+  { pattern: '〜らしい', meaning: 'seems; apparently; typical of', explanation: 'Hearsay or strong inference based on outside info. Also means "typical of" when attached to nouns (春らしい = spring-like).', forms: ['Verb / い-adj plain + らしい', 'な-adj / Noun + らしい'], examples: [ { jp: '田中さんは来ないらしい。', en: 'Apparently Tanaka is not coming.' }, { jp: '今日は春らしい天気だ。', en: 'Today’s weather feels very spring-like.' } ] }
+];
+
+window.N3_READING = [
+  { title: '夏祭りの夜', en_title: 'A Summer Festival Night', level: 'N3 · short', tokens: [ { k: '町', r: 'まち' }, 'の', { k: '夏祭', r: 'なつまつ' }, 'りは', { k: '毎年', r: 'まいとし' }, { k: '八月', r: 'はちがつ' }, 'の', { k: '終', r: 'お' }, 'わりに', { k: '行', r: 'おこな' }, 'われる。', { k: '小', r: 'ちい' }, 'さい', { k: '頃', r: 'ころ' }, 'から、', { k: '家族', r: 'かぞく' }, 'と', { k: '一緒', r: 'いっしょ' }, 'に', { k: '出', r: 'で' }, 'かけるのが', { k: '楽', r: 'たの' }, 'しみだった。', { k: '神社', r: 'じんじゃ' }, 'の', { k: '前', r: 'まえ' }, 'には', { k: '屋台', r: 'やたい' }, 'が', { k: '並', r: 'なら' }, 'び、', 'たこ', { k: '焼', r: 'や' }, 'きや', 'かき', { k: '氷', r: 'ごおり' }, 'の', { k: '匂', r: 'にお' }, 'いが', { k: '辺', r: 'あた' }, 'りに', { k: '広', r: 'ひろ' }, 'がっていた。', { k: '夜', r: 'よる' }, 'になると', { k: '花火', r: 'はなび' }, 'が', { k: '上', r: 'あ' }, 'がり、', { k: '空', r: 'そら' }, 'が', { k: '一瞬', r: 'いっしゅん' }, 'だけ', { k: '昼', r: 'ひる' }, 'のように', { k: '明', r: 'あか' }, 'るくなった。' ], translation: 'My town’s summer festival is held every year at the end of August. From when I was small, I looked forward to going with my family. In front of the shrine, food stalls line up, and the smell of takoyaki and shaved ice spreads through the air. When night falls, fireworks rise up, and for just an instant the sky becomes bright as day.' },
+  { title: '電車の中の親切', en_title: 'Kindness on the Train', level: 'N3 · short', tokens: [ { k: '昨日', r: 'きのう' }, '、', { k: '会社', r: 'かいしゃ' }, 'からの', { k: '帰', r: 'かえ' }, 'り', { k: '道', r: 'みち' }, 'で、', { k: '電車', r: 'でんしゃ' }, 'が', { k: '混', r: 'こ' }, 'んでいた。', { k: '私', r: 'わたし' }, 'の', { k: '前', r: 'まえ' }, 'に', { k: '立', r: 'た' }, 'っていた', { k: '若', r: 'わか' }, 'い', { k: '男性', r: 'だんせい' }, 'が、お', { k: '年寄', r: 'としよ' }, 'りに', { k: '席', r: 'せき' }, 'を', { k: '譲', r: 'ゆず' }, 'った。', 'その', { k: '様子', r: 'ようす' }, 'を', { k: '見', r: 'み' }, 'て、なんだか', { k: '心', r: 'こころ' }, 'が', { k: '温', r: 'あたた' }, 'かくなった。', { k: '小', r: 'ちい' }, 'さな', { k: '親切', r: 'しんせつ' }, 'が、', { k: '人', r: 'ひと' }, 'の', { k: '一日', r: 'いちにち' }, 'を', { k: '変', r: 'か' }, 'えることもある。' ], translation: "Yesterday, on my way home from work, the train was crowded. A young man who was standing in front of me gave up his seat to an elderly person. Watching that, my heart felt somehow warm. A small kindness can change someone's whole day." },
+  { title: '雨上がりの匂い', en_title: 'The Smell After Rain', level: 'N3 · short', tokens: [ { k: '雨', r: 'あめ' }, 'が', { k: '上', r: 'あ' }, 'がったあとの', { k: '街', r: 'まち' }, 'の', { k: '匂', r: 'にお' }, 'いが', { k: '好', r: 'す' }, 'きだ。', 'アスファルトが', { k: '濡', r: 'ぬ' }, 'れて、', { k: '土', r: 'つち' }, 'の', { k: '匂', r: 'にお' }, 'いと', { k: '混', r: 'ま' }, 'ざる。', { k: '子', r: 'こ' }, 'どもの', { k: '頃', r: 'ころ' }, '、', { k: '長靴', r: 'ながぐつ' }, 'を', { k: '履', r: 'は' }, 'いて', { k: '水溜', r: 'みずた' }, 'まりを', { k: '飛', r: 'と' }, 'び', { k: '越', r: 'こ' }, 'えるのが', { k: '楽', r: 'たの' }, 'しかった。', { k: '今', r: 'いま' }, 'でも、', { k: '雨上', r: 'あめあ' }, 'がりの', { k: '空', r: 'そら' }, 'を', { k: '見', r: 'み' }, 'ると、', 'あの', { k: '頃', r: 'ころ' }, 'のことを', { k: '思', r: 'おも' }, 'い', { k: '出', r: 'だ' }, 'す。' ], translation: 'I love the smell of the city after the rain has stopped. The asphalt gets wet, and the scent mixes with the smell of earth. When I was a child, it was fun to put on rain boots and jump over puddles. Even now, when I look at the sky after rain, I remember those days.' }
+];
+
+window.N3_LISTENING = [
+  { jp: 'すみません、駅までどう行けばいいですか。', kana: 'すみません、えきまでどういけばいいですか。', en: 'Excuse me, how do I get to the station?' },
+  { jp: 'この電車は新宿に止まりますか。', kana: 'このでんしゃはしんじゅくにとまりますか。', en: 'Does this train stop at Shinjuku?' },
+  { jp: '注文を変更したいんですが、よろしいですか。', kana: 'ちゅうもんをへんこうしたいんですが、よろしいですか。', en: "I'd like to change my order, is that alright?" },
+  { jp: 'お会計、別々でお願いします。', kana: 'おかいけい、べつべつでおねがいします。', en: 'Please split the bill.' },
+  { jp: '今日は早めに帰らせていただきます。', kana: 'きょうははやめにかえらせていただきます。', en: 'Today I will be leaving early, with your permission.' },
+  { jp: 'もう少しゆっくり話していただけませんか。', kana: 'もうすこしゆっくりはなしていただけませんか。', en: 'Could you speak a little more slowly, please?' },
+  { jp: 'この道をまっすぐ行って、二つ目の信号を右に曲がってください。', kana: 'このみちをまっすぐいって、ふたつめのしんごうをみぎにまがってください。', en: 'Go straight down this road and turn right at the second traffic light.' },
+  { jp: '雨が降りそうだから、傘を持って行ったほうがいいよ。', kana: 'あめがふりそうだから、かさをもっていったほうがいいよ。', en: "It looks like rain, so you'd better take an umbrella." }
+];
+
+window.N3_PHRASES = [
+  { jp: 'お疲れさま', kana: 'おつかれさま', en: '"Good work" — greeting peers or wrapping up a task', nuance: 'Polite, ubiquitous in workplaces.' },
+  { jp: 'よろしくお願いします', kana: 'よろしくおねがいします', en: '"Please treat me kindly" / catch-all polite request', nuance: 'Said when starting almost anything new with someone.' },
+  { jp: 'やっぱり', kana: 'やっぱり', en: '"As I thought" / "after all"', nuance: 'Conversational form of やはり. Hugely common.' },
+  { jp: 'なるほど', kana: 'なるほど', en: '"I see" / "makes sense"', nuance: 'Avoid overusing with superiors — sounds slightly evaluative.' },
+  { jp: 'とりあえず', kana: 'とりあえず', en: '"For now" / "to start with"', nuance: 'Pragmatic — "let’s do this first and figure the rest out".' },
+  { jp: 'しょうがない', kana: 'しょうがない', en: '"It can’t be helped"', nuance: 'A whole worldview in three syllables.' },
+  { jp: 'ちょっと…', kana: 'ちょっと…', en: 'Softens a refusal: "uh, that’s a bit…"', nuance: 'Trailing off is the refusal — completing the sentence is rude.' },
+  { jp: 'まあまあ', kana: 'まあまあ', en: '"So-so" / "calm down now"', nuance: 'Versatile filler; tone carries the meaning.' }
+];
+
+// ── EXTRA VOCAB ──
+window.N3_VOCAB_EXTRA = [
+  { jp: '溜まる', kana: 'たまる', en: 'to accumulate; to pile up', pos: 'verb', ex: { jp: '仕事が溜まっている。', en: 'Work is piling up.' } },
+  { jp: '我慢', kana: 'がまん', en: 'patience; endurance', pos: 'noun', ex: { jp: 'もう少し我慢して。', en: 'Bear with it a little longer.' } },
+  { jp: '訪ねる', kana: 'たずねる', en: 'to visit', pos: 'verb', ex: { jp: '先生を訪ねた。', en: 'I visited my teacher.' } },
+  { jp: '比べる', kana: 'くらべる', en: 'to compare', pos: 'verb', ex: { jp: '値段を比べる。', en: 'To compare prices.' } },
+  { jp: '失敗', kana: 'しっぱい', en: 'failure; mistake', pos: 'noun', ex: { jp: '失敗を恐れるな。', en: "Don't fear failure." } },
+  { jp: '成功', kana: 'せいこう', en: 'success', pos: 'noun', ex: { jp: '実験に成功した。', en: 'The experiment succeeded.' } },
+  { jp: '記録', kana: 'きろく', en: 'record; document', pos: 'noun', ex: { jp: '記録を残す。', en: 'To leave a record.' } },
+  { jp: '希望', kana: 'きぼう', en: 'hope; wish', pos: 'noun', ex: { jp: '希望を持つ。', en: 'To hold hope.' } },
+  { jp: '案内', kana: 'あんない', en: 'guidance; showing around', pos: 'noun', ex: { jp: '町を案内する。', en: 'To show around town.' } },
+  { jp: '預ける', kana: 'あずける', en: 'to entrust; to deposit', pos: 'verb', ex: { jp: '荷物を預ける。', en: 'To check my luggage.' } },
+  { jp: '謝る', kana: 'あやまる', en: 'to apologize', pos: 'verb', ex: { jp: '友達に謝った。', en: 'I apologized to my friend.' } },
+  { jp: '違反', kana: 'いはん', en: 'violation; breach', pos: 'noun', ex: { jp: '交通違反。', en: 'Traffic violation.' } },
+  { jp: '苦労', kana: 'くろう', en: 'hardship; difficulty', pos: 'noun', ex: { jp: '苦労して育てた。', en: 'I raised them through hardship.' } },
+  { jp: '汚い', kana: 'きたない', en: 'dirty', pos: 'i-adj', ex: { jp: '部屋が汚い。', en: 'The room is dirty.' } },
+  { jp: '素敵', kana: 'すてき', en: 'lovely; wonderful', pos: 'na-adj', ex: { jp: '素敵な景色。', en: 'A wonderful view.' } },
+  { jp: '驚く', kana: 'おどろく', en: 'to be surprised', pos: 'verb', ex: { jp: 'ニュースに驚いた。', en: 'I was surprised by the news.' } },
+  { jp: '迷う', kana: 'まよう', en: 'to be lost; to hesitate', pos: 'verb', ex: { jp: '道に迷った。', en: 'I got lost.' } },
+  { jp: '届く', kana: 'とどく', en: 'to reach; to arrive', pos: 'verb', ex: { jp: '手紙が届いた。', en: 'The letter arrived.' } },
+  { jp: '増える', kana: 'ふえる', en: 'to increase', pos: 'verb', ex: { jp: '人口が増えた。', en: 'The population grew.' } },
+  { jp: '減る', kana: 'へる', en: 'to decrease', pos: 'verb', ex: { jp: '貯金が減る。', en: 'Savings decrease.' } },
+  { jp: '腹', kana: 'はら', en: 'belly; stomach', pos: 'noun', ex: { jp: '腹が立つ。', en: 'To get angry (lit. belly stands).' } },
+  { jp: '寂しい', kana: 'さびしい', en: 'lonely', pos: 'i-adj', ex: { jp: '一人で寂しい。', en: 'I am lonely by myself.' } },
+  { jp: '丁寧', kana: 'ていねい', en: 'polite; careful', pos: 'na-adj', ex: { jp: '丁寧に説明する。', en: 'Explain politely.' } },
+  { jp: '出張', kana: 'しゅっちょう', en: 'business trip', pos: 'noun', ex: { jp: '大阪へ出張する。', en: 'Go on a business trip to Osaka.' } },
+  { jp: '夢中', kana: 'むちゅう', en: 'absorbed; engrossed', pos: 'na-adj', ex: { jp: '本に夢中になる。', en: 'To get absorbed in a book.' } },
+  { jp: '無理', kana: 'むり', en: 'impossible; unreasonable', pos: 'na-adj', ex: { jp: 'それは無理だ。', en: "That's impossible." } },
+  { jp: '余裕', kana: 'よゆう', en: 'room; leeway', pos: 'noun', ex: { jp: '時間に余裕がある。', en: 'I have time to spare.' } },
+  { jp: '別れる', kana: 'わかれる', en: 'to part; to break up', pos: 'verb', ex: { jp: '駅で別れた。', en: 'We parted at the station.' } },
+  { jp: '渡す', kana: 'わたす', en: 'to hand over', pos: 'verb', ex: { jp: '手紙を渡す。', en: 'To hand over a letter.' } },
+  { jp: '勝つ', kana: 'かつ', en: 'to win', pos: 'verb', ex: { jp: '試合に勝った。', en: 'We won the match.' } },
+  { jp: '負ける', kana: 'まける', en: 'to lose', pos: 'verb', ex: { jp: '試合に負けた。', en: 'We lost the match.' } },
+  { jp: '実は', kana: 'じつは', en: 'actually; the truth is', pos: 'adverb', ex: { jp: '実は知らなかった。', en: "Actually I didn't know." } },
+  { jp: '結局', kana: 'けっきょく', en: 'in the end; after all', pos: 'adverb', ex: { jp: '結局行かなかった。', en: "In the end I didn't go." } },
+  { jp: '確かに', kana: 'たしかに', en: 'certainly; surely', pos: 'adverb', ex: { jp: '確かに受け取った。', en: 'I have certainly received it.' } },
+  { jp: '一応', kana: 'いちおう', en: 'just in case; for now', pos: 'adverb', ex: { jp: '一応確認する。', en: 'I will check just in case.' } }
+];
+
+window.N3_KANJI_EXTRA = [
+  { c: '訪', on: 'ホウ', kun: 'たず(ねる)・おとず(れる)', en: 'visit, call on', strokes: 11, words: ['訪問', '訪日'] },
+  { c: '比', on: 'ヒ', kun: 'くら(べる)', en: 'compare, ratio', strokes: 4, words: ['比較', '比例'] },
+  { c: '失', on: 'シツ', kun: 'うしな(う)', en: 'lose, miss, mistake', strokes: 5, words: ['失敗', '失礼', '消失'] },
+  { c: '成', on: 'セイ・ジョウ', kun: 'な(る)', en: 'become, succeed', strokes: 6, words: ['成功', '成長', '完成'] },
+  { c: '記', on: 'キ', kun: 'しる(す)', en: 'record, write down', strokes: 10, words: ['記録', '日記', '記憶'] },
+  { c: '希', on: 'キ', kun: 'まれ', en: 'hope, rare', strokes: 7, words: ['希望', '希少'] },
+  { c: '案', on: 'アン', kun: '—', en: 'plan, proposal, guide', strokes: 10, words: ['案内', '提案', '案'] },
+  { c: '預', on: 'ヨ', kun: 'あず(ける)', en: 'entrust, deposit', strokes: 13, words: ['預金', '預ける'] },
+  { c: '謝', on: 'シャ', kun: 'あやま(る)', en: 'apologize, thank', strokes: 17, words: ['感謝', '謝罪'] },
+  { c: '違', on: 'イ', kun: 'ちが(う)', en: 'differ, mistake', strokes: 13, words: ['違反', '間違い', '違法'] },
+  { c: '苦', on: 'ク', kun: 'くる(しい)・にが(い)', en: 'suffering, bitter', strokes: 8, words: ['苦労', '苦手', '苦い'] },
+  { c: '汚', on: 'オ', kun: 'きたな(い)・よご(す)', en: 'dirty, pollute', strokes: 6, words: ['汚い', '汚染', '汚れ'] },
+  { c: '驚', on: 'キョウ', kun: 'おどろ(く)', en: 'astonish, surprise', strokes: 22, words: ['驚く', '驚異', '驚嘆'] },
+  { c: '迷', on: 'メイ', kun: 'まよ(う)', en: 'lost, astray, perplexed', strokes: 9, words: ['迷う', '迷子', '迷惑'] },
+  { c: '届', on: 'カイ', kun: 'とど(く)・とど(ける)', en: 'deliver, reach', strokes: 8, words: ['届く', '届ける', '欠席届'] },
+  { c: '増', on: 'ゾウ', kun: 'ふ(える)・ま(す)', en: 'increase, swell', strokes: 14, words: ['増える', '増加', '増税'] },
+  { c: '減', on: 'ゲン', kun: 'へ(る)・へ(らす)', en: 'decrease, reduce', strokes: 12, words: ['減る', '減少', '加減'] },
+  { c: '寂', on: 'ジャク・セキ', kun: 'さび(しい)', en: 'lonely, quiet', strokes: 11, words: ['寂しい', '静寂'] },
+  { c: '丁', on: 'チョウ・テイ', kun: '—', en: 'street, ward; precise', strokes: 2, words: ['丁寧', '丁度', '一丁目'] },
+  { c: '張', on: 'チョウ', kun: 'は(る)', en: 'stretch, spread', strokes: 11, words: ['出張', '主張', '緊張'] },
+  { c: '勝', on: 'ショウ', kun: 'か(つ)', en: 'win, prevail', strokes: 12, words: ['勝つ', '優勝', '勝手'] },
+  { c: '負', on: 'フ', kun: 'ま(ける)・お(う)', en: 'lose, bear, owe', strokes: 9, words: ['負ける', '負担', '勝負'] }
+];
+
+window.N3_PHRASES_EXTRA = [
+  { jp: 'お先に失礼します', kana: 'おさきにしつれいします', en: '"Pardon me for leaving first" — leaving work', nuance: 'Said when you leave the office before others.' },
+  { jp: 'お邪魔します', kana: 'おじゃまします', en: '"Sorry to intrude" — entering someone’s home', nuance: 'Polite, almost obligatory when visiting.' },
+  { jp: 'いただきます', kana: 'いただきます', en: '"I humbly receive" — before eating', nuance: 'A small ritual before any meal.' },
+  { jp: 'ごちそうさま', kana: 'ごちそうさま', en: '"It was a feast" — after eating', nuance: 'Closes the meal; said to whoever prepared/paid.' },
+  { jp: 'おかげさまで', kana: 'おかげさまで', en: '"Thanks to you" — when things are well', nuance: 'Modest credit-spreading; even toward strangers.' },
+  { jp: 'お大事に', kana: 'おだいじに', en: '"Take care of yourself"', nuance: 'Said to someone unwell or recovering.' },
+  { jp: 'ご苦労さま', kana: 'ごくろうさま', en: '"Thanks for the trouble"', nuance: 'Used to subordinates — NOT to superiors. Use お疲れさま instead.' },
+  { jp: 'お世話になります', kana: 'おせわになります', en: '"I’ll be in your care"', nuance: 'Opens business emails; precedes any new working relationship.' }
+];
+
+window.N3_DIALOGUES = [
+  { title: 'カフェにて', en_title: 'At a Café', turns: [ { s: 'A', jp: 'いらっしゃいませ。ご注文はお決まりですか。', en: 'Welcome. Have you decided on your order?' }, { s: 'B', jp: 'えーと、ホットコーヒーを一つお願いします。', en: 'Um, one hot coffee please.' }, { s: 'A', jp: 'サイズはいかがなさいますか。', en: 'And what size would you like?' }, { s: 'B', jp: '一番小さいので大丈夫です。', en: 'The smallest one is fine.' }, { s: 'A', jp: '店内でお召し上がりですか。', en: 'Will you be having it here?' }, { s: 'B', jp: 'はい、ここで飲みます。', en: "Yes, I'll drink it here." } ] },
+  { title: '道を聞く', en_title: 'Asking Directions', turns: [ { s: 'A', jp: 'すみません、この近くに郵便局はありますか。', en: 'Excuse me, is there a post office near here?' }, { s: 'B', jp: 'はい、ありますよ。この道をまっすぐ行ってください。', en: 'Yes, there is. Go straight down this road.' }, { s: 'A', jp: 'どのくらいかかりますか。', en: 'How long does it take?' }, { s: 'B', jp: '歩いて五分ぐらいです。二つ目の信号の右側にあります。', en: 'About five minutes on foot. It is on the right at the second traffic light.' }, { s: 'A', jp: 'ありがとうございました。', en: 'Thank you very much.' } ] },
+  { title: '電話で予約', en_title: 'Booking by Phone', turns: [ { s: 'A', jp: 'はい、さくらレストランです。', en: 'Hello, Sakura Restaurant.' }, { s: 'B', jp: '予約をお願いしたいんですが。', en: "I'd like to make a reservation." }, { s: 'A', jp: 'いつのご予約でしょうか。', en: 'For when, please?' }, { s: 'B', jp: '今週の土曜日の七時から、三人でお願いします。', en: 'This Saturday from seven, for three people.' }, { s: 'A', jp: '少々お待ちください。…はい、ご用意できます。', en: 'One moment please. …Yes, we can accommodate you.' }, { s: 'B', jp: 'よろしくお願いします。', en: 'Thank you, much appreciated.' } ] },
+  { title: '体調を気にかける', en_title: 'Checking on Wellbeing', turns: [ { s: 'A', jp: '顔色が悪いね。大丈夫？', en: "You look pale. Are you OK?" }, { s: 'B', jp: 'うん、ちょっと頭が痛いだけ。', en: 'Yeah, my head just hurts a bit.' }, { s: 'A', jp: '無理しないで、早く帰ったほうがいいよ。', en: "Don't push yourself, you should head home early." }, { s: 'B', jp: 'そうだね。あとでそうするよ。ありがとう。', en: "You're right. I'll do that later. Thanks." } ] },
+  { title: '友達を誘う', en_title: 'Inviting a Friend', turns: [ { s: 'A', jp: '今度の週末、暇？映画でも見に行かない？', en: 'Free this weekend? Want to go see a movie or something?' }, { s: 'B', jp: '行きたいけど、土曜日はバイトがあるんだ。', en: "I want to, but I have a part-time job on Saturday." }, { s: 'A', jp: 'じゃあ日曜日はどう？', en: 'How about Sunday then?' }, { s: 'B', jp: '日曜日なら大丈夫。何時にしようか。', en: 'Sunday works. What time should we make it?' }, { s: 'A', jp: '二時にしよう。駅前で待ち合わせね。', en: "Let's say two. Let's meet in front of the station." } ] },
+  { title: '忘れ物', en_title: 'A Lost Item', turns: [ { s: 'A', jp: 'すみません、ここに傘を忘れたんですが。', en: 'Excuse me, I left an umbrella here.' }, { s: 'B', jp: '何色の傘ですか。', en: 'What color was it?' }, { s: 'A', jp: '黒い長い傘で、持ち手が木でできています。', en: "It's a long black umbrella with a wooden handle." }, { s: 'B', jp: 'ああ、これですね。お預かりしていました。', en: 'Ah, this one? We had been holding it.' }, { s: 'A', jp: 'あ、それです。助かりました、ありがとうございます。', en: "Yes, that's it. What a relief — thank you." } ] }
+];
+
+window.N3_CLOZE = [
+  { parts: ['若い', 'BLANK', '、いろいろな経験をしたほうがいい。'], answer: 'うちに', choices: ['うちに', 'ところに', 'おかげで', 'せいで'], gloss: 'while you are young' },
+  { parts: ['先生の', 'BLANK', '、合格できました。'], answer: 'おかげで', choices: ['おかげで', 'せいで', 'ために', 'うちに'], gloss: 'thanks to my teacher' },
+  { parts: ['雨の', 'BLANK', '、試合が中止になった。'], answer: 'せいで', choices: ['せいで', 'おかげで', 'うちに', 'について'], gloss: 'because of the rain' },
+  { parts: ['日本に来た', 'BLANK', 'なのに、もう日本語が上手だ。'], answer: 'ばかり', choices: ['ばかり', 'ところ', 'はず', 'らしい'], gloss: 'just arrived' },
+  { parts: ['物価は上がる', 'BLANK', 'だ。'], answer: 'ばかり', choices: ['ばかり', 'だけ', 'うち', 'ほど'], gloss: 'only goes up' },
+  { parts: ['毎日運動する', 'BLANK', 'している。'], answer: 'ように', choices: ['ように', 'ために', 'ことに', 'そうに'], gloss: 'make a point of' },
+  { parts: ['日本語が話せる', 'BLANK', 'なった。'], answer: 'ように', choices: ['ように', 'そうに', 'ことに', 'はずに'], gloss: 'came to be able' },
+  { parts: ['お金', 'BLANK', 'あれば、旅行に行ける。'], answer: 'さえ', choices: ['さえ', 'だけ', 'しか', 'こそ'], gloss: 'as long as' },
+  { parts: ['日本の文化', 'BLANK', '研究しています。'], answer: 'について', choices: ['について', 'にとって', 'によって', 'に対して'], gloss: 'about' },
+  { parts: ['私', 'BLANK', '、家族が一番大切だ。'], answer: 'にとって', choices: ['にとって', 'について', 'によって', 'にしては'], gloss: 'for me' },
+  { parts: ['田中さんは来ない', 'BLANK', '。'], answer: 'らしい', choices: ['らしい', 'そうだ', 'ようだ', 'みたい'], gloss: 'apparently' },
+  { parts: ['彼は相変わらず', 'BLANK', 'だ。'], answer: '元気', choices: ['元気', '元の気', '気元', '気の元'], gloss: 'as energetic as ever' },
+  { parts: ['駐車', 'BLANK', 'の看板を見落とした。'], answer: '禁止', choices: ['禁止', '禁断', '中止', '停止'], gloss: 'no parking' },
+  { parts: ['彼の状態は悪くなる', 'BLANK', 'だ。'], answer: 'ばかり', choices: ['ばかり', 'ところ', 'はず', 'よう'], gloss: 'only gets worse' },
+  { parts: ['電車に乗り遅れない', 'BLANK', 'に走った。'], answer: 'よう', choices: ['よう', 'はず', 'こと', 'ため'], gloss: "so as not to" }
+];
+
+window.N3_CONJ = [
+  { word: '行く', type: '5-dan / u-verb', prompts: [ { target: 'past plain', ans: '行った', en: 'went' }, { target: '〜て form', ans: '行って', en: 'going / and then' }, { target: 'negative plain', ans: '行かない', en: "doesn't go" }, { target: 'past negative', ans: '行かなかった', en: "didn't go" }, { target: 'potential', ans: '行ける', en: 'can go' }, { target: 'volitional', ans: '行こう', en: "let's go" } ] },
+  { word: '読む', type: '5-dan / u-verb', prompts: [ { target: 'polite past', ans: '読みました', en: 'read (polite, past)' }, { target: '〜て form', ans: '読んで', en: 'reading' }, { target: 'passive', ans: '読まれる', en: 'is read' }, { target: 'causative', ans: '読ませる', en: 'make read' } ] },
+  { word: '話す', type: '5-dan / u-verb', prompts: [ { target: '〜て form', ans: '話して', en: 'talking' }, { target: 'negative plain', ans: '話さない', en: "doesn't talk" }, { target: 'potential', ans: '話せる', en: 'can talk' }, { target: 'conditional ば', ans: '話せば', en: 'if (one) talks' } ] },
+  { word: '食べる', type: '1-dan / ru-verb', prompts: [ { target: 'past plain', ans: '食べた', en: 'ate' }, { target: '〜て form', ans: '食べて', en: 'eating' }, { target: 'negative plain', ans: '食べない', en: "doesn't eat" }, { target: 'potential', ans: '食べられる', en: 'can eat' }, { target: 'causative', ans: '食べさせる', en: 'make eat' }, { target: 'volitional', ans: '食べよう', en: "let's eat" } ] },
+  { word: '見る', type: '1-dan / ru-verb', prompts: [ { target: 'polite present', ans: '見ます', en: 'sees (polite)' }, { target: 'past plain', ans: '見た', en: 'saw' }, { target: 'passive', ans: '見られる', en: 'is seen' }, { target: 'imperative', ans: '見ろ', en: 'look! (rough)' } ] },
+  { word: '来る', type: 'irregular', prompts: [ { target: 'past plain', ans: '来た', en: 'came' }, { target: '〜て form', ans: '来て', en: 'coming' }, { target: 'negative plain', ans: '来ない', en: "doesn't come" }, { target: 'potential', ans: '来られる', en: 'can come' }, { target: 'volitional', ans: '来よう', en: "let's come" } ] },
+  { word: 'する', type: 'irregular', prompts: [ { target: 'past plain', ans: 'した', en: 'did' }, { target: '〜て form', ans: 'して', en: 'doing' }, { target: 'negative plain', ans: 'しない', en: "doesn't do" }, { target: 'potential', ans: 'できる', en: 'can do' }, { target: 'passive', ans: 'される', en: 'is done' }, { target: 'volitional', ans: 'しよう', en: "let's do" } ] },
+  { word: '高い', type: 'i-adjective', prompts: [ { target: 'past plain', ans: '高かった', en: 'was tall/expensive' }, { target: 'negative', ans: '高くない', en: "isn't tall" }, { target: 'past negative', ans: '高くなかった', en: "wasn't tall" }, { target: 'adverbial', ans: '高く', en: 'tall(ly)' } ] },
+  { word: '楽しい', type: 'i-adjective', prompts: [ { target: 'past plain', ans: '楽しかった', en: 'was fun' }, { target: 'negative', ans: '楽しくない', en: "isn't fun" }, { target: '〜くて (te)', ans: '楽しくて', en: 'fun and…' } ] },
+  { word: '静か', type: 'na-adjective', prompts: [ { target: 'attributive', ans: '静かな', en: 'quiet (modifying noun)' }, { target: 'plain past', ans: '静かだった', en: 'was quiet' }, { target: 'negative', ans: '静かじゃない', en: "isn't quiet" }, { target: 'adverbial', ans: '静かに', en: 'quietly' } ] },
+  { word: '便利', type: 'na-adjective', prompts: [ { target: 'attributive', ans: '便利な', en: 'convenient (modifier)' }, { target: 'negative', ans: '便利じゃない', en: "isn't convenient" }, { target: 'past', ans: '便利だった', en: 'was convenient' } ] }
+];
+</script>
+
+<!-- ── TWEAKS PANEL ── -->
+<script type="text/babel">
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;overflow-wrap:anywhere}
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'), []);
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled);
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => { if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true); };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => { setRailVisible(on); window.postMessage({ type: '__deck_rail_visible', on }, '*'); };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current; if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = { x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)), y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)) };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') { window.addEventListener('resize', clampToViewport); return () => window.removeEventListener('resize', clampToViewport); }
+    const ro = new ResizeObserver(clampToViewport); ro.observe(document.documentElement); return () => ro.disconnect();
+  }, [open, clampToViewport]);
+  React.useEffect(() => {
+    const onMsg = (e) => { const t = e?.data?.type; if (t === '__activate_edit_mode') setOpen(true); else if (t === '__deactivate_edit_mode') setOpen(false); };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+  const dismiss = () => { setOpen(false); window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*'); };
+  const onDragStart = (e) => {
+    const panel = dragRef.current; if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => { offsetRef.current = { x: startRight - (ev.clientX - sx), y: startBottom - (ev.clientY - sy) }; clampToViewport(); };
+    const up = () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up); };
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up);
+  };
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()} onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+function TweakSection({ label, children }) {
+  return (<><div className="twk-sect">{label}</div>{children}</>);
+}
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl"><span>{label}</span>{value != null && <span className="twk-val">{value}</span>}</div>
+      {children}
+    </div>
+  );
+}
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value} onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  const valueRef = React.useRef(value); valueRef.current = value;
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    const resolve = (s) => { const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s); return m === undefined ? s : typeof m === 'object' ? m.value : m; };
+    return <TweakSelect label={label} value={value} options={options} onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+  const segAt = (clientX) => { const r = trackRef.current.getBoundingClientRect(); const inner = r.width - 4; const i = Math.floor(((clientX - r.left - 2) / inner) * n); return opts[Math.max(0, Math.min(n - 1, i))].value; };
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX); if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => { if (!trackRef.current) return; const v = segAt(ev.clientX); if (v !== valueRef.current) onChange(v); };
+    const up = () => { setDragging(false); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+  };
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`, width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>{o.label}</button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => { const v = typeof o === 'object' ? o.value : o; const l = typeof o === 'object' ? o.label : o; return <option key={v} value={v}>{l}</option>; })}
+      </select>
+    </TweakRow>
+  );
+}
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder} onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => { if (min != null && n < min) return min; if (max != null && n > max) return max; return n; };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault(); startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => { const dx = ev.clientX - startRef.current.x; const raw = startRef.current.val + dx * step; const snapped = Math.round(raw / step) * step; onChange(clamp(Number(snapped.toFixed(decimals)))); };
+    const up = () => { window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', up); };
+    window.addEventListener('pointermove', move); window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step} onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', ''); const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0'); const n = parseInt(x.slice(0, 6), 16); if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255; return r * 299 + g * 587 + b * 114 > 148000;
+}
+const __TwkCheck = ({ light }) => (<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} /></svg>);
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (<div className="twk-row twk-row-h"><div className="twk-lbl"><span>{label}</span></div><input type="color" className="twk-swatch" value={value} onChange={(e) => onChange(e.target.value)} /></div>);
+  }
+  const key = (o) => String(JSON.stringify(o)).toLowerCase(); const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => { const colors = Array.isArray(o) ? o : [o]; const [hero, ...rest] = colors; const sup = rest.slice(0, 4); const on = key(o) === cur;
+          return (<button key={i} type="button" className="twk-chip" role="radio" aria-checked={on} data-on={on ? '1' : '0'} aria-label={colors.join(', ')} title={colors.join(' · ')} style={{ background: hero }} onClick={() => onChange(o)}>{sup.length > 0 && (<span>{sup.map((c, j) => <i key={j} style={{ background: c }} />)}</span>)}{on && <__TwkCheck light={__twkIsLight(hero)} />}</button>);
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+function TweakButton({ label, onClick, secondary = false }) {
+  return (<button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'} onClick={onClick}>{label}</button>);
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+</script>
+
+<!-- ── SCREENS ── -->
+<script type="text/babel">
+const { useState, useMemo, useEffect, useRef, useCallback } = React;
+
+const Ruby = ({ k, r }) => (<ruby>{k}<rt>{r}</rt></ruby>);
+
+const RenderTokens = ({ tokens, furigana }) => (
+  <span className="jp" style={{ fontSize: 22, lineHeight: 2.1 }}>
+    {tokens.map((t, i) => {
+      if (typeof t === 'string') return <span key={i}>{t}</span>;
+      if (furigana) return <Ruby key={i} k={t.k} r={t.r} />;
+      return <span key={i}>{t.k}</span>;
+    })}
+  </span>
+);
+
+function speakJP(text, rate = 0.95) {
+  if (!('speechSynthesis' in window)) return;
+  try {
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ja-JP'; u.rate = rate; u.pitch = 1.0;
+    const voices = window.speechSynthesis.getVoices();
+    const jp = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('ja'));
+    if (jp) u.voice = jp;
+    window.speechSynthesis.speak(u);
+  } catch (e) {}
+}
+
+const SpeakerIcon = ({ size = 14 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M11 5L6 9H2v6h4l5 4z" /><path d="M15.5 8.5a5 5 0 010 7" /><path d="M19 5a9 9 0 010 14" />
+  </svg>
+);
+
+const PlayBtn = ({ text, label = 'play' }) => (
+  <button className="btn btn-ghost" onClick={() => speakJP(text)} title="Speak (Japanese TTS)">
+    <SpeakerIcon /> <span className="mono" style={{ fontSize: 10 }}>{label}</span>
+  </button>
+);
+
+const Today = ({ stats, onJump }) => {
+  const today = new Date();
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+  const dateLine = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+  const jpDate = today.toLocaleDateString('ja-JP', { month: 'long', day: 'numeric' });
+  const plan = [
+    { id: 'cards',  k: '札', label: 'Vocab review',    count: 18, time: '~9 min', target: 'cards' },
+    { id: 'kanji',  k: '漢', label: 'New kanji · 5',   count: 5,  time: '~7 min', target: 'kanji' },
+    { id: 'gram',   k: '文', label: 'Grammar drill',   count: 3,  time: '~6 min', target: 'grammar' },
+    { id: 'read',   k: '読', label: 'Reading passage', count: 1,  time: '~5 min', target: 'reading' },
+    { id: 'listen', k: '聴', label: 'Listening lines', count: 8,  time: '~4 min', target: 'listening' }
+  ];
+  const heat = [3,4,2,4,4,1,0,3,4,2,4,3,5,4];
+  return (
+    <div data-screen-label="01 Today">
+      <div className="page-head">
+        <div>
+          <h1 className="page-title"><span className="kanji">本日</span>Today</h1>
+          <div className="page-sub">{dayName} · {dateLine} · <span className="jp">{jpDate}</span></div>
+        </div>
+        <div style={{ display: 'flex', gap: 10 }}>
+          <button className="btn"><span className="mono">JLPT N3</span></button>
+          <button className="btn btn-primary" onClick={() => onJump('cards')}>Begin review →</button>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 22, marginBottom: 22 }}>
+        <div className="card raised" style={{ padding: 0 }}>
+          <div style={{ padding: '20px 24px 14px', borderBottom: '1px solid var(--line-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div><div className="label">Daily plan</div><div className="en-disp" style={{ fontSize: 22, marginTop: 4 }}>5 tasks · ≈31 min</div></div>
+            <div style={{ textAlign: 'right' }}><div className="mono" style={{ color: 'var(--ink-4)' }}>PROGRESS</div><div className="en-disp" style={{ fontSize: 22, color: 'var(--moss)' }}>2 / 5</div></div>
+          </div>
+          <div>
+            {plan.map((p, i) => (
+              <div key={p.id} onClick={() => onJump(p.target)} style={{ display: 'grid', gridTemplateColumns: '54px 1fr auto auto', alignItems: 'center', gap: 18, padding: '16px 24px', borderTop: i === 0 ? 'none' : '1px solid var(--line-soft)', cursor: 'pointer', transition: 'background .12s' }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(26,24,20,.025)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                <div style={{ width: 44, height: 44, borderRadius: 8, background: i < 2 ? 'var(--ink)' : 'var(--paper-warm)', color: i < 2 ? 'var(--paper-light)' : 'var(--ink-2)', display: 'grid', placeItems: 'center', fontFamily: 'var(--serif-jp)', fontWeight: 600, fontSize: 22, border: i < 2 ? 'none' : '1px solid var(--line)' }}>{p.k}</div>
+                <div><div style={{ fontWeight: 600, fontSize: 14, color: 'var(--ink)' }}>{p.label}</div><div className="mono" style={{ color: 'var(--ink-4)', marginTop: 2 }}>{p.count} items · {p.time}</div></div>
+                {i < 2 ? <span className="mono" style={{ color: 'var(--moss)' }}>● DONE</span> : <span className="mono" style={{ color: 'var(--ink-4)' }}>○ TODO</span>}
+                <span style={{ color: 'var(--ink-4)' }}>→</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div className="card raised" style={{ marginBottom: 18 }}>
+            <div className="label" style={{ marginBottom: 12 }}>Word of the day · 今日の言葉</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
+              <div className="jp-disp" style={{ fontSize: 54, lineHeight: 1 }}>懐かしい</div>
+              <PlayBtn text="懐かしい" />
+            </div>
+            <div className="jp" style={{ color: 'var(--ink-4)', fontSize: 14, marginBottom: 18 }}>なつかしい</div>
+            <div className="en-disp" style={{ fontSize: 18, color: 'var(--ink-2)', fontStyle: 'italic' }}>"Nostalgic — fondly remembered."</div>
+            <div style={{ marginTop: 16, paddingTop: 14, borderTop: '1px dashed var(--line)' }}>
+              <div className="jp" style={{ fontSize: 17 }}>この曲、懐かしいなあ。</div>
+              <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', fontSize: 13, marginTop: 4 }}>"This song… brings me back."</div>
+            </div>
+          </div>
+          <div className="card">
+            <div className="label" style={{ marginBottom: 12 }}>Last 14 days</div>
+            <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 56 }}>
+              {heat.map((h, i) => (<div key={i} style={{ flex: 1, height: `${10 + h * 9}px`, background: h === 0 ? 'var(--line-soft)' : h >= 4 ? 'var(--ink)' : 'var(--ink-3)', opacity: h === 0 ? .5 : 1, borderRadius: 2 }} />))}
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+              <span className="mono" style={{ color: 'var(--ink-4)' }}>2 wks ago</span>
+              <span className="mono" style={{ color: 'var(--ink-4)' }}>today</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="card raised">
+        <div className="label" style={{ marginBottom: 16 }}>N3 corpus progress</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+          {[ { label: 'Vocab known', cur: 412, total: 1820, color: 'var(--ink)' }, { label: 'Kanji learned', cur: 168, total: 367, color: 'var(--indigo)' }, { label: 'Grammar points', cur: 52, total: 124, color: 'var(--persimmon)' }, { label: 'Mock test score', cur: 96, total: 180, color: 'var(--moss)' } ].map(s => (
+            <div key={s.label}>
+              <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 6 }}>{s.label.toUpperCase()}</div>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}><span className="en-disp" style={{ fontSize: 36, lineHeight: 1, color: s.color }}>{s.cur}</span><span className="mono" style={{ color: 'var(--ink-4)' }}>/ {s.total}</span></div>
+              <div style={{ height: 4, background: 'var(--line-soft)', borderRadius: 2, overflow: 'hidden' }}><div style={{ width: `${(s.cur / s.total) * 100}%`, height: '100%', background: s.color }} /></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Cards = () => {
+  const [idx, setIdx] = useState(0);
+  const [revealed, setRevealed] = useState(false);
+  const [history, setHistory] = useState([]);
+  const deck = window.N3_VOCAB;
+  const card = deck[idx];
+  const next = (grade) => { setHistory(h => [...h, { idx, grade }]); setRevealed(false); setIdx(i => (i + 1) % deck.length); };
+  const grades = [
+    { id: 'again', label: 'Again', jp: 'もう一度', sub: '< 1m', color: 'var(--rouge)' },
+    { id: 'hard',  label: 'Hard',  jp: '難しい',   sub: '10m',  color: 'var(--persimmon)' },
+    { id: 'good',  label: 'Good',  jp: 'できた',   sub: '1d',   color: 'var(--moss)' },
+    { id: 'easy',  label: 'Easy',  jp: '簡単',     sub: '4d',   color: 'var(--indigo)' },
+  ];
+  useEffect(() => {
+    const h = (e) => { if (e.key === ' ') { e.preventDefault(); setRevealed(r => !r); } else if (revealed) { if (e.key === '1') next('again'); if (e.key === '2') next('hard'); if (e.key === '3') next('good'); if (e.key === '4') next('easy'); } };
+    window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h);
+  });
+  return (
+    <div data-screen-label="02 Cards">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">札</span>Cards</h1><div className="page-sub">Spaced repetition — vocab</div></div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>{idx + 1} / {deck.length}</span>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>·</span>
+          <span className="mono" style={{ color: 'var(--moss)' }}>{history.length} reviewed</span>
+        </div>
+      </div>
+      <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'var(--card)', borderRadius: 14, border: '1px solid var(--line)', transform: 'translate(8px, 8px) rotate(.7deg)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'var(--card)', borderRadius: 14, border: '1px solid var(--line)', transform: 'translate(-6px, 4px) rotate(-.9deg)', zIndex: 0 }} />
+        <div className="card raised" style={{ position: 'relative', zIndex: 1, minHeight: 380, padding: 0, display: 'flex', flexDirection: 'column' }}>
+          <div style={{ padding: '14px 22px', borderBottom: '1px solid var(--line-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span className="mono" style={{ color: 'var(--ink-4)' }}>{card.pos.toUpperCase()} · N3</span>
+            <PlayBtn text={card.jp} label="hear" />
+          </div>
+          <div style={{ flex: 1, padding: '40px 40px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+            <div className="jp-disp" style={{ fontSize: 64, lineHeight: 1.2, letterSpacing: '.04em' }}>{card.jp}</div>
+            {revealed && (<>
+              <div className="jp" style={{ fontSize: 22, color: 'var(--ink-3)', marginTop: 16 }}>{card.kana}</div>
+              <div style={{ height: 1, width: 60, background: 'var(--line)', margin: '24px 0' }} />
+              <div className="en-disp" style={{ fontSize: 26, color: 'var(--ink-2)' }}>{card.en}</div>
+              <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px dashed var(--line)', maxWidth: 480 }}>
+                <div className="jp" style={{ fontSize: 18, color: 'var(--ink-2)' }}>{card.ex.jp}</div>
+                <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 6, fontSize: 14 }}>"{card.ex.en}"</div>
+              </div>
+            </>)}
+            {!revealed && <button onClick={() => setRevealed(true)} className="btn" style={{ marginTop: 28 }}>Show answer · <span className="mono">SPACE</span></button>}
+          </div>
+          {revealed && (
+            <div style={{ borderTop: '1px solid var(--line-soft)', padding: 14, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+              {grades.map((g, i) => (
+                <button key={g.id} onClick={() => next(g.id)} style={{ border: '1px solid var(--line)', borderRadius: 8, padding: '12px 8px', background: 'var(--card)', cursor: 'pointer', transition: 'all .12s', textAlign: 'center' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = g.color; e.currentTarget.style.background = 'var(--card-raised)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--line)'; e.currentTarget.style.background = 'var(--card)'; }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}><span className="mono" style={{ color: 'var(--ink-4)' }}>{i + 1}</span><span className="mono" style={{ color: g.color }}>{g.sub}</span></div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: g.color }}>{g.label}</div>
+                  <div className="jp" style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 2 }}>{g.jp}</div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--ink-4)' }}>
+        <span className="mono">SPACE</span> reveal · <span className="mono">1–4</span> grade · <span className="mono">→</span> skip
+      </div>
+    </div>
+  );
+};
+
+const Kanji = () => {
+  const list = window.N3_KANJI;
+  const [active, setActive] = useState(0);
+  const k = list[active];
+  return (
+    <div data-screen-label="03 Kanji">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">漢字</span>Kanji</h1><div className="page-sub">N3 level · {list.length} characters</div></div>
+        <div style={{ display: 'flex', gap: 8 }}><button className="btn">By stroke ↓</button><button className="btn">Filter</button></div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 28 }}>
+        <div>
+          <div className="label" style={{ marginBottom: 10 }}>Browse · {list.length}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 6 }}>
+            {list.map((kk, i) => (
+              <button key={i} onClick={() => setActive(i)} style={{ aspectRatio: '1', background: i === active ? 'var(--ink)' : 'var(--card)', color: i === active ? 'var(--paper-light)' : 'var(--ink)', border: '1px solid var(--line)', borderRadius: 6, fontFamily: 'var(--serif-jp)', fontSize: 26, fontWeight: 500, cursor: 'pointer', transition: 'all .1s' }}
+                onMouseEnter={e => { if (i !== active) e.currentTarget.style.background = 'var(--card-raised)'; }}
+                onMouseLeave={e => { if (i !== active) e.currentTarget.style.background = 'var(--card)'; }}>{kk.c}</button>
+            ))}
+          </div>
+        </div>
+        <div className="card raised" style={{ padding: 0 }}>
+          <div style={{ padding: '24px 28px', display: 'grid', gridTemplateColumns: '260px 1fr', gap: 28, borderBottom: '1px solid var(--line-soft)' }}>
+            <div style={{ aspectRatio: '1', background: 'var(--paper-light)', border: '1px solid var(--line)', borderRadius: 8, display: 'grid', placeItems: 'center', position: 'relative', backgroundImage: 'linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px)', backgroundSize: '100% 50%, 50% 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }}>
+              <div className="jp-disp" style={{ fontSize: 160, lineHeight: 1 }}>{k.c}</div>
+              <button onClick={() => speakJP(k.c)} style={{ position: 'absolute', bottom: 10, right: 10, background: 'var(--card)', border: '1px solid var(--line)', borderRadius: 999, padding: '4px 10px', cursor: 'pointer' }}><SpeakerIcon /></button>
+            </div>
+            <div>
+              <div className="label">Meaning</div>
+              <div className="en-disp" style={{ fontSize: 28, marginTop: 4 }}>{k.en}</div>
+              <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: '90px 1fr', rowGap: 8, fontSize: 14 }}>
+                <span className="label">On'yomi</span><span className="jp" style={{ color: 'var(--indigo)' }}>{k.on}</span>
+                <span className="label">Kun'yomi</span><span className="jp" style={{ color: 'var(--persimmon)' }}>{k.kun}</span>
+                <span className="label">Strokes</span><span className="mono">{k.strokes}</span>
+              </div>
+            </div>
+          </div>
+          <div style={{ padding: '20px 28px' }}>
+            <div className="label" style={{ marginBottom: 10 }}>Compound words</div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              {k.words.map((w, i) => (<div key={i} style={{ padding: '8px 14px', border: '1px solid var(--line)', borderRadius: 6, background: 'var(--paper-light)' }}><span className="jp" style={{ fontSize: 18 }}>{w}</span></div>))}
+            </div>
+          </div>
+          <div style={{ padding: '14px 28px 22px', borderTop: '1px dashed var(--line)', display: 'flex', gap: 10 }}>
+            <button className="btn">Add to deck</button>
+            <button className="btn">Practice writing</button>
+            <button className="btn btn-ghost" onClick={() => setActive(i => (i + 1) % list.length)}>Next →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Grammar = () => {
+  const list = window.N3_GRAMMAR;
+  const [open, setOpen] = useState(0);
+  return (
+    <div data-screen-label="04 Grammar">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">文法</span>Grammar</h1><div className="page-sub">N3 patterns · {list.length} entries</div></div>
+        <div style={{ display: 'flex', gap: 8 }}><button className="btn">Drill mode</button></div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '300px 1fr', gap: 28 }}>
+        <div>
+          {list.map((g, i) => (
+            <button key={i} onClick={() => setOpen(i)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '14px 16px', borderRadius: 8, background: i === open ? 'var(--ink)' : 'transparent', color: i === open ? 'var(--paper-light)' : 'var(--ink-2)', border: '1px solid', borderColor: i === open ? 'var(--ink)' : 'transparent', marginBottom: 4, cursor: 'pointer' }}>
+              <div className="jp" style={{ fontSize: 18, fontWeight: 600 }}>{g.pattern}</div>
+              <div style={{ fontSize: 12, color: i === open ? 'rgba(255,255,255,.6)' : 'var(--ink-4)', marginTop: 2 }}>{g.meaning}</div>
+            </button>
+          ))}
+        </div>
+        <div className="card raised">
+          {(() => { const g = list[open]; return (
+            <>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18 }}>
+                <div>
+                  <div className="label">Pattern</div>
+                  <div className="jp-disp" style={{ fontSize: 44, lineHeight: 1.1, marginTop: 6 }}>{g.pattern}</div>
+                  <div className="en-disp" style={{ fontSize: 20, color: 'var(--ink-3)', fontStyle: 'italic', marginTop: 8 }}>"{g.meaning}"</div>
+                </div>
+                <span className="mono" style={{ color: 'var(--ink-4)', padding: '4px 8px', border: '1px solid var(--line)', borderRadius: 4 }}>{open + 1} / {list.length}</span>
+              </div>
+              <div style={{ paddingTop: 18, borderTop: '1px solid var(--line-soft)' }}>
+                <div className="label" style={{ marginBottom: 8 }}>How to use</div>
+                <div style={{ fontSize: 14.5, color: 'var(--ink-2)', lineHeight: 1.65, marginBottom: 18 }}>{g.explanation}</div>
+                <div className="label" style={{ marginBottom: 8 }}>Forms</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
+                  {g.forms.map((f, i) => (<div key={i} className="jp" style={{ padding: '6px 12px', background: 'var(--paper-light)', border: '1px solid var(--line)', borderRadius: 4, fontSize: 14 }}>{f}</div>))}
+                </div>
+                <div className="label" style={{ marginBottom: 10 }}>Examples</div>
+                <div style={{ display: 'grid', gap: 14 }}>
+                  {g.examples.map((ex, i) => (
+                    <div key={i} style={{ padding: '14px 16px', background: 'var(--paper-light)', borderLeft: '2px solid var(--ink-3)', borderRadius: '0 6px 6px 0' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div className="jp" style={{ fontSize: 19 }}>{ex.jp}</div>
+                        <button onClick={() => speakJP(ex.jp)} className="btn btn-ghost" style={{ padding: 6 }}><SpeakerIcon /></button>
+                      </div>
+                      <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 6, fontSize: 14 }}>"{ex.en}"</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ); })()}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Reading = () => {
+  const list = window.N3_READING;
+  const [idx, setIdx] = useState(0);
+  const [furi, setFuri] = useState(true);
+  const [showTr, setShowTr] = useState(false);
+  const r = list[idx];
+  return (
+    <div data-screen-label="05 Reading">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">読解</span>Reading</h1><div className="page-sub">Short passages with furigana support</div></div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="btn" onClick={() => setFuri(f => !f)}><span className="mono">フリガナ</span> {furi ? 'on' : 'off'}</button>
+          <button className="btn" onClick={() => speakJP(r.tokens.map(t => typeof t === 'string' ? t : t.k).join(''))}><SpeakerIcon /> Read aloud</button>
+        </div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: 28 }}>
+        <div>
+          <div className="label" style={{ marginBottom: 12 }}>Passages</div>
+          {list.map((p, i) => (
+            <button key={i} onClick={() => { setIdx(i); setShowTr(false); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 14px', border: '1px solid var(--line)', borderRadius: 8, marginBottom: 8, background: i === idx ? 'var(--ink)' : 'var(--card)', color: i === idx ? 'var(--paper-light)' : 'var(--ink)', cursor: 'pointer' }}>
+              <div className="jp" style={{ fontWeight: 600 }}>{p.title}</div>
+              <div className="mono" style={{ fontSize: 10, opacity: .65, marginTop: 4 }}>{p.level}</div>
+            </button>
+          ))}
+        </div>
+        <div className="card raised" style={{ padding: '40px 48px' }}>
+          <div className="label" style={{ marginBottom: 8 }}>{r.level}</div>
+          <h2 className="jp-disp" style={{ fontSize: 32, margin: '0 0 6px' }}>{r.title}</h2>
+          <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginBottom: 30 }}>"{r.en_title}"</div>
+          <RenderTokens tokens={r.tokens} furigana={furi} />
+          <div style={{ marginTop: 36, paddingTop: 22, borderTop: '1px dashed var(--line)' }}>
+            {!showTr ? (
+              <button className="btn" onClick={() => setShowTr(true)}>Show English translation</button>
+            ) : (
+              <>
+                <div className="label" style={{ marginBottom: 8 }}>Translation</div>
+                <div className="en-disp" style={{ fontSize: 17, fontStyle: 'italic', color: 'var(--ink-2)', lineHeight: 1.7 }}>{r.translation}</div>
+                <button className="btn btn-ghost" style={{ marginTop: 12 }} onClick={() => setShowTr(false)}>Hide</button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Listening = () => {
+  const list = window.N3_LISTENING;
+  const [rate, setRate] = useState(0.9);
+  const [reveal, setReveal] = useState({});
+  return (
+    <div data-screen-label="06 Listening">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">聴解</span>Listening</h1><div className="page-sub">Tap to hear · transcripts hidden until you decide</div></div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>SPEED</span>
+          {[0.7, 0.9, 1.0].map(r => (
+            <button key={r} onClick={() => setRate(r)} className="btn" style={{ background: rate === r ? 'var(--ink)' : 'var(--card)', color: rate === r ? 'var(--paper-light)' : 'var(--ink-2)', borderColor: rate === r ? 'var(--ink)' : 'var(--line)' }}>{r}×</button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: 'grid', gap: 14 }}>
+        {list.map((l, i) => (
+          <div key={i} className="card" style={{ padding: '18px 22px' }}>
+            <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
+              <button onClick={() => speakJP(l.jp, rate)} style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--ink)', color: 'var(--paper-light)', display: 'grid', placeItems: 'center', flexShrink: 0, border: 'none', cursor: 'pointer', transition: 'transform .12s' }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+              </button>
+              <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <div>
+                    <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 4 }}>LINE {String(i + 1).padStart(2, '0')}</div>
+                    {reveal[i] ? (<>
+                      <div className="jp" style={{ fontSize: 19, marginBottom: 4 }}>{l.jp}</div>
+                      <div className="jp" style={{ color: 'var(--ink-4)', fontSize: 13 }}>{l.kana}</div>
+                      <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', marginTop: 6, fontSize: 14 }}>"{l.en}"</div>
+                    </>) : (
+                      <div style={{ color: 'var(--ink-4)', fontStyle: 'italic', fontSize: 14 }}>Transcript hidden — listen first</div>
+                    )}
+                  </div>
+                  <button className="btn btn-ghost" onClick={() => setReveal(r => ({ ...r, [i]: !r[i] }))}>{reveal[i] ? 'Hide' : 'Reveal'}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const Phrases = () => {
+  const list = window.N3_PHRASES;
+  return (
+    <div data-screen-label="07 Phrases">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">慣用</span>Native phrases</h1><div className="page-sub">Everyday expressions with cultural nuance</div></div>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 18 }}>
+        {list.map((p, i) => (
+          <div key={i} className="card raised" style={{ display: 'flex', flexDirection: 'column', padding: '22px 24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+              <div><div className="jp-disp" style={{ fontSize: 30, lineHeight: 1.2 }}>{p.jp}</div><div className="jp" style={{ color: 'var(--ink-4)', fontSize: 13, marginTop: 4 }}>{p.kana}</div></div>
+              <PlayBtn text={p.jp} />
+            </div>
+            <div className="en-disp" style={{ fontSize: 17, color: 'var(--ink-2)', fontStyle: 'italic', marginTop: 14, marginBottom: 12 }}>{p.en}</div>
+            <div style={{ marginTop: 'auto', paddingTop: 12, borderTop: '1px dashed var(--line)', fontSize: 12.5, color: 'var(--ink-3)' }}>
+              <span className="mono" style={{ color: 'var(--gold)', marginRight: 6 }}>NUANCE</span>{p.nuance}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+Object.assign(window, { Today, Cards, Kanji, Grammar, Reading, Listening, Phrases, speakJP, PlayBtn });
+</script>
+
+<!-- ── SCREENS 2 (SRS + expanded screens) ── -->
+<script type="text/babel">
+const { useState: uS2, useEffect: uE2, useMemo: uM2, useRef: uR2 } = React;
+
+window.N3_VOCAB   = (window.N3_VOCAB   || []).concat(window.N3_VOCAB_EXTRA   || []);
+window.N3_KANJI   = (window.N3_KANJI   || []).concat(window.N3_KANJI_EXTRA   || []);
+window.N3_PHRASES = (window.N3_PHRASES || []).concat(window.N3_PHRASES_EXTRA || []);
+
+const SRS_KEY = 'sumi.n3.srs.v1';
+const SRS = {
+  load() { try { return JSON.parse(localStorage.getItem(SRS_KEY) || '{}'); } catch { return {}; } },
+  save(state) { try { localStorage.setItem(SRS_KEY, JSON.stringify(state)); } catch {} },
+  apply(card, grade, now = Date.now()) {
+    const next = { ef: 2.5, ivl: 0, reps: 0, due: now, lapses: 0, ...card };
+    const MIN_EF = 1.3;
+    if (grade === 'again') { next.reps = 0; next.lapses += 1; next.ef = Math.max(MIN_EF, next.ef - 0.2); next.ivl = 0; next.due = now + 60 * 1000; }
+    else { next.reps += 1; if (grade === 'hard') next.ef = Math.max(MIN_EF, next.ef - 0.15); if (grade === 'easy') next.ef = next.ef + 0.15; if (next.reps === 1) next.ivl = grade === 'easy' ? 4 : 1; else if (next.reps === 2) next.ivl = grade === 'easy' ? 7 : 3; else next.ivl = Math.round(next.ivl * next.ef * (grade === 'hard' ? 0.8 : grade === 'easy' ? 1.3 : 1)); next.due = now + next.ivl * 86400000; }
+    return next;
+  }
+};
+
+const Cards2 = () => {
+  const deck = window.N3_VOCAB;
+  const [state, setState] = uS2(() => SRS.load());
+  const [tick, setTick] = uS2(0);
+  const [revealed, setRevealed] = uS2(false);
+  const [reviewedCount, setReviewedCount] = uS2(0);
+  const queue = uM2(() => {
+    const now = Date.now();
+    const due = deck.map((c, i) => ({ i, c, s: state[c.jp] })).filter(x => x.s && x.s.due <= now).sort((a, b) => a.s.due - b.s.due);
+    const newCards = deck.map((c, i) => ({ i, c, s: null })).filter(x => !state[x.c.jp]);
+    return [...due, ...newCards];
+  }, [deck, state, tick]);
+  const current = queue[0];
+  const grade = (g) => {
+    if (!current) return;
+    const next = SRS.apply(state[current.c.jp] || {}, g);
+    const newState = { ...state, [current.c.jp]: next };
+    setState(newState); SRS.save(newState); setReviewedCount(c => c + 1); setRevealed(false); setTick(t => t + 1);
+  };
+  uE2(() => {
+    const h = (e) => { if (e.key === ' ') { e.preventDefault(); setRevealed(r => !r); } else if (revealed) { if (e.key === '1') grade('again'); if (e.key === '2') grade('hard'); if (e.key === '3') grade('good'); if (e.key === '4') grade('easy'); } };
+    window.addEventListener('keydown', h); return () => window.removeEventListener('keydown', h);
+  });
+  const dueCount = uM2(() => { const now = Date.now(); return deck.filter(c => state[c.jp] && state[c.jp].due <= now).length; }, [state, tick, deck]);
+  const newCount = deck.length - Object.keys(state).length;
+  const grades = [
+    { id: 'again', label: 'Again', jp: 'もう一度', color: 'var(--rouge)' },
+    { id: 'hard',  label: 'Hard',  jp: '難しい',   color: 'var(--persimmon)' },
+    { id: 'good',  label: 'Good',  jp: 'できた',   color: 'var(--moss)' },
+    { id: 'easy',  label: 'Easy',  jp: '簡単',     color: 'var(--indigo)' },
+  ];
+  const previewIvl = (g) => { if (!current) return ''; const next = SRS.apply(state[current.c.jp] || {}, g); if (next.ivl === 0) return '<1m'; if (next.ivl === 1) return '1d'; return next.ivl + 'd'; };
+  if (!current) return (
+    <div data-screen-label="02 Cards">
+      <div className="page-head"><div><h1 className="page-title"><span className="kanji">札</span>Cards</h1><div className="page-sub">Spaced repetition — vocab</div></div></div>
+      <div className="card raised" style={{ textAlign: 'center', padding: '80px 24px' }}>
+        <div className="jp-disp" style={{ fontSize: 64 }}>完了</div>
+        <div className="en-disp" style={{ fontSize: 22, color: 'var(--ink-3)', fontStyle: 'italic', marginTop: 12 }}>All caught up — come back later for the next review.</div>
+        <div className="mono" style={{ color: 'var(--ink-4)', marginTop: 18 }}>{reviewedCount} reviewed this session</div>
+      </div>
+    </div>
+  );
+  const card = current.c; const st = state[card.jp];
+  return (
+    <div data-screen-label="02 Cards">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">札</span>Cards</h1><div className="page-sub">Spaced repetition · {deck.length} in deck</div></div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <span className="mono" style={{ color: 'var(--persimmon)' }}>{dueCount} due</span>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>·</span>
+          <span className="mono" style={{ color: 'var(--indigo)' }}>{newCount} new</span>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>·</span>
+          <span className="mono" style={{ color: 'var(--moss)' }}>{reviewedCount} done</span>
+        </div>
+      </div>
+      <div style={{ position: 'relative', maxWidth: 720, margin: '0 auto' }}>
+        <div style={{ position: 'absolute', inset: 0, background: 'var(--card)', borderRadius: 14, border: '1px solid var(--line)', transform: 'translate(8px, 8px) rotate(.7deg)', zIndex: 0 }} />
+        <div style={{ position: 'absolute', inset: 0, background: 'var(--card)', borderRadius: 14, border: '1px solid var(--line)', transform: 'translate(-6px, 4px) rotate(-.9deg)', zIndex: 0 }} />
+        <div className="card raised" style={{ position: 'relative', zIndex: 1, minHeight: 380, padding: 0 }}>
+          <div style={{ padding: '14px 22px', borderBottom: '1px solid var(--line-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span className="mono" style={{ color: 'var(--ink-4)' }}>{card.pos.toUpperCase()} · N3 · {st ? `seen ${st.reps}× · ef ${st.ef.toFixed(2)}` : 'NEW'}</span>
+            <button className="btn btn-ghost" onClick={() => window.speakJP(card.jp)}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 5L6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 010 7"/></svg> hear
+            </button>
+          </div>
+          <div style={{ padding: '40px 40px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center' }}>
+            <div className="jp-disp" style={{ fontSize: 64, lineHeight: 1.2 }}>{card.jp}</div>
+            {revealed ? (<>
+              <div className="jp" style={{ fontSize: 22, color: 'var(--ink-3)', marginTop: 16 }}>{card.kana}</div>
+              <div style={{ height: 1, width: 60, background: 'var(--line)', margin: '24px 0' }} />
+              <div className="en-disp" style={{ fontSize: 26 }}>{card.en}</div>
+              <div style={{ marginTop: 22, paddingTop: 18, borderTop: '1px dashed var(--line)', maxWidth: 480 }}>
+                <div className="jp" style={{ fontSize: 18 }}>{card.ex.jp}</div>
+                <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 6, fontSize: 14 }}>"{card.ex.en}"</div>
+              </div>
+            </>) : (
+              <button onClick={() => setRevealed(true)} className="btn" style={{ marginTop: 28 }}>Show answer · <span className="mono">SPACE</span></button>
+            )}
+          </div>
+          {revealed && (
+            <div style={{ borderTop: '1px solid var(--line-soft)', padding: 14, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
+              {grades.map((g, i) => (
+                <button key={g.id} onClick={() => grade(g.id)} style={{ border: '1px solid var(--line)', borderRadius: 8, padding: '12px 8px', background: 'var(--card)', cursor: 'pointer', textAlign: 'center' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = g.color; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--line)'; }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}><span className="mono" style={{ color: 'var(--ink-4)' }}>{i + 1}</span><span className="mono" style={{ color: g.color }}>{previewIvl(g.id)}</span></div>
+                  <div style={{ fontWeight: 600, fontSize: 14, color: g.color }}>{g.label}</div>
+                  <div className="jp" style={{ fontSize: 12, color: 'var(--ink-4)', marginTop: 2 }}>{g.jp}</div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--ink-4)' }}>
+        <span className="mono">SPACE</span> reveal · <span className="mono">1–4</span> grade · progress saved locally
+      </div>
+    </div>
+  );
+};
+
+const Listening2 = () => {
+  const lines = window.N3_LISTENING;
+  const dialogues = window.N3_DIALOGUES;
+  const [mode, setMode] = uS2('dialogue');
+  const [rate, setRate] = uS2(0.9);
+  const [revealAll, setRevealAll] = uS2({});
+  const [diaIdx, setDiaIdx] = uS2(0);
+  const [playingTurn, setPlayingTurn] = uS2(-1);
+  const playRunRef = uR2(0);
+  const dia = dialogues[diaIdx];
+  const playDialogue = async () => {
+    const runId = ++playRunRef.current;
+    for (let i = 0; i < dia.turns.length; i++) {
+      if (runId !== playRunRef.current) return;
+      setPlayingTurn(i); window.speakJP(dia.turns[i].jp, rate);
+      await new Promise(res => { const check = () => { if (runId !== playRunRef.current) return res(); if (!window.speechSynthesis.speaking) return setTimeout(res, 380); setTimeout(check, 120); }; setTimeout(check, 300); });
+    }
+    setPlayingTurn(-1);
+  };
+  const stopDialogue = () => { playRunRef.current++; window.speechSynthesis.cancel(); setPlayingTurn(-1); };
+  return (
+    <div data-screen-label="06 Listening">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">聴解</span>Listening</h1><div className="page-sub">Dialogues and single lines</div></div>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div style={{ display: 'flex', border: '1px solid var(--line)', borderRadius: 999, padding: 3 }}>
+            {['dialogue', 'lines'].map(m => (
+              <button key={m} onClick={() => setMode(m)} style={{ padding: '6px 14px', borderRadius: 999, border: 'none', cursor: 'pointer', background: mode === m ? 'var(--ink)' : 'transparent', color: mode === m ? 'var(--paper-light)' : 'var(--ink-3)', fontSize: 12, fontWeight: 500 }}>{m === 'dialogue' ? 'Dialogues' : 'Single lines'}</button>
+            ))}
+          </div>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>SPEED</span>
+          {[0.7, 0.9, 1.0].map(r => (
+            <button key={r} onClick={() => setRate(r)} className="btn" style={{ background: rate === r ? 'var(--ink)' : 'var(--card)', color: rate === r ? 'var(--paper-light)' : 'var(--ink-2)', borderColor: rate === r ? 'var(--ink)' : 'var(--line)' }}>{r}×</button>
+          ))}
+        </div>
+      </div>
+      {mode === 'dialogue' ? (
+        <div style={{ display: 'grid', gridTemplateColumns: '240px 1fr', gap: 28 }}>
+          <div>
+            <div className="label" style={{ marginBottom: 10 }}>Scenarios</div>
+            {dialogues.map((d, i) => (
+              <button key={i} onClick={() => { stopDialogue(); setDiaIdx(i); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '12px 14px', border: '1px solid var(--line)', borderRadius: 8, marginBottom: 8, background: i === diaIdx ? 'var(--ink)' : 'var(--card)', color: i === diaIdx ? 'var(--paper-light)' : 'var(--ink)', cursor: 'pointer' }}>
+                <div className="jp" style={{ fontWeight: 600 }}>{d.title}</div>
+                <div className="en-disp" style={{ fontSize: 12, fontStyle: 'italic', opacity: .65, marginTop: 4 }}>"{d.en_title}"</div>
+              </button>
+            ))}
+          </div>
+          <div className="card raised" style={{ padding: '28px 32px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 22 }}>
+              <div><div className="label">Dialogue</div><h2 className="jp-disp" style={{ fontSize: 28, margin: '4px 0 0' }}>{dia.title}</h2></div>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="btn" onClick={() => setRevealAll(r => ({ ...r, [diaIdx]: !r[diaIdx] }))}>{revealAll[diaIdx] ? 'Hide transcript' : 'Reveal transcript'}</button>
+                {playingTurn === -1 ? <button className="btn btn-primary" onClick={playDialogue}>▶ Play full</button> : <button className="btn" onClick={stopDialogue}>■ Stop</button>}
+              </div>
+            </div>
+            <div style={{ display: 'grid', gap: 14 }}>
+              {dia.turns.map((t, i) => {
+                const isA = t.s === 'A'; const playing = playingTurn === i;
+                return (
+                  <div key={i} style={{ display: 'grid', gridTemplateColumns: '40px 1fr auto', gap: 14, alignItems: 'flex-start', padding: '14px 16px', background: playing ? 'var(--paper-light)' : 'transparent', borderLeft: '3px solid', borderLeftColor: playing ? (isA ? 'var(--indigo)' : 'var(--persimmon)') : 'transparent', borderRadius: '0 8px 8px 0', transition: 'all .15s' }}>
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', background: isA ? 'var(--indigo)' : 'var(--persimmon)', color: 'var(--paper-light)', display: 'grid', placeItems: 'center', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 600 }}>{t.s}</div>
+                    <div>
+                      <div className="jp" style={{ fontSize: 18, lineHeight: 1.5 }}>{t.jp}</div>
+                      {revealAll[diaIdx] && <div className="en-disp" style={{ fontSize: 13, fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 6 }}>"{t.en}"</div>}
+                    </div>
+                    <button className="btn btn-ghost" onClick={() => window.speakJP(t.jp, rate)}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div style={{ display: 'grid', gap: 14 }}>
+          {lines.map((l, i) => (
+            <div key={i} className="card" style={{ padding: '18px 22px' }}>
+              <div style={{ display: 'flex', gap: 22, alignItems: 'center' }}>
+                <button onClick={() => window.speakJP(l.jp, rate)} style={{ width: 56, height: 56, borderRadius: '50%', background: 'var(--ink)', color: 'var(--paper-light)', display: 'grid', placeItems: 'center', flexShrink: 0, border: 'none', cursor: 'pointer' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+                </button>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <div>
+                      <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 4 }}>LINE {String(i + 1).padStart(2, '0')}</div>
+                      {revealAll['L' + i] ? (<>
+                        <div className="jp" style={{ fontSize: 19 }}>{l.jp}</div>
+                        <div className="jp" style={{ color: 'var(--ink-4)', fontSize: 13 }}>{l.kana}</div>
+                        <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', marginTop: 6, fontSize: 14 }}>"{l.en}"</div>
+                      </>) : (<div style={{ color: 'var(--ink-4)', fontStyle: 'italic', fontSize: 14 }}>Transcript hidden — listen first</div>)}
+                    </div>
+                    <button className="btn btn-ghost" onClick={() => setRevealAll(r => ({ ...r, ['L' + i]: !r['L' + i] }))}>{revealAll['L' + i] ? 'Hide' : 'Reveal'}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Cloze = () => {
+  const items = window.N3_CLOZE;
+  const [idx, setIdx] = uS2(0);
+  const [picked, setPicked] = uS2(null);
+  const [stats, setStats] = uS2({ right: 0, wrong: 0 });
+  const item = items[idx];
+  const pick = (c) => { if (picked !== null) return; setPicked(c); setStats(s => c === item.answer ? { ...s, right: s.right + 1 } : { ...s, wrong: s.wrong + 1 }); };
+  const next = () => { setPicked(null); setIdx(i => (i + 1) % items.length); };
+  return (
+    <div data-screen-label="08 Cloze">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">穴埋め</span>Cloze</h1><div className="page-sub">Sentence mining — fill the gap</div></div>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+          <span className="mono" style={{ color: 'var(--moss)' }}>● {stats.right} right</span>
+          <span className="mono" style={{ color: 'var(--rouge)' }}>● {stats.wrong} wrong</span>
+          <span className="mono" style={{ color: 'var(--ink-4)' }}>{idx + 1}/{items.length}</span>
+        </div>
+      </div>
+      <div className="card raised" style={{ maxWidth: 820, margin: '0 auto', padding: '48px 56px' }}>
+        <div className="label" style={{ marginBottom: 8 }}>Complete the sentence</div>
+        <div className="jp" style={{ fontSize: 28, lineHeight: 1.8 }}>
+          {item.parts.map((p, i) => p === 'BLANK' ? (
+            <span key={i} style={{ display: 'inline-block', minWidth: 96, textAlign: 'center', padding: '2px 12px', borderBottom: '2px solid var(--ink)', background: picked ? (picked === item.answer ? 'rgba(108,122,74,.18)' : 'rgba(138,58,58,.15)') : 'var(--paper-light)', borderRadius: '4px 4px 0 0', fontFamily: 'var(--serif-jp)', color: picked ? 'var(--ink)' : 'var(--ink-4)' }}>{picked || '______'}</span>
+          ) : <span key={i}>{p}</span>)}
+        </div>
+        <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 12, fontSize: 14 }}>hint: <span style={{ color: 'var(--ink-3)' }}>"{item.gloss}"</span></div>
+        <div style={{ marginTop: 36, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+          {item.choices.map(c => {
+            const isAnswer = c === item.answer; const isPicked = c === picked;
+            let bg = 'var(--card)', color = 'var(--ink)', border = 'var(--line)';
+            if (picked) { if (isAnswer) { bg = 'rgba(108,122,74,.15)'; border = 'var(--moss)'; } else if (isPicked) { bg = 'rgba(138,58,58,.12)'; border = 'var(--rouge)'; } else { color = 'var(--ink-4)'; } }
+            return (<button key={c} onClick={() => pick(c)} disabled={!!picked} style={{ padding: '14px 18px', borderRadius: 8, border: '1px solid', borderColor: border, background: bg, color, cursor: picked ? 'default' : 'pointer', fontFamily: 'var(--serif-jp)', fontSize: 22, fontWeight: 500 }}>{c}</button>);
+          })}
+        </div>
+        {picked && (
+          <div style={{ marginTop: 28, paddingTop: 18, borderTop: '1px dashed var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div>{picked === item.answer ? <span className="en-disp" style={{ color: 'var(--moss)', fontSize: 18 }}>✓ Correct</span> : <><span className="en-disp" style={{ color: 'var(--rouge)', fontSize: 18 }}>✗ Not quite</span><span className="en-disp" style={{ color: 'var(--ink-4)', fontStyle: 'italic', marginLeft: 12 }}>→ answer: <b className="jp" style={{ color: 'var(--ink)' }}>{item.answer}</b></span></>}</div>
+            <button className="btn btn-primary" onClick={next}>Next →</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const buildConjQueue = () => {
+  const list = [];
+  for (const w of window.N3_CONJ) for (const p of w.prompts) list.push({ word: w.word, type: w.type, ...p });
+  for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+  return list;
+};
+
+const Conjugate = () => {
+  const [queue, setQueue] = uS2(() => buildConjQueue());
+  const [idx, setIdx] = uS2(0);
+  const [input, setInput] = uS2('');
+  const [result, setResult] = uS2(null);
+  const [score, setScore] = uS2({ right: 0, wrong: 0 });
+  const inputRef = uR2(null);
+  const item = queue[idx];
+  uE2(() => { inputRef.current?.focus(); }, [idx]);
+  const submit = () => { if (result) return; if (!input.trim()) return; const ok = input.trim() === item.ans; setResult(ok ? 'right' : 'wrong'); setScore(s => ok ? { ...s, right: s.right + 1 } : { ...s, wrong: s.wrong + 1 }); };
+  const next = () => { if (idx + 1 >= queue.length) { setQueue(buildConjQueue()); setIdx(0); } else setIdx(i => i + 1); setInput(''); setResult(null); };
+  const skip = () => { setResult('wrong'); setScore(s => ({ ...s, wrong: s.wrong + 1 })); };
+  return (
+    <div data-screen-label="09 Conjugate">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">活用</span>Conjugate</h1><div className="page-sub">Verbs and adjectives — type the form</div></div>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}><span className="mono" style={{ color: 'var(--moss)' }}>● {score.right}</span><span className="mono" style={{ color: 'var(--rouge)' }}>● {score.wrong}</span><span className="mono" style={{ color: 'var(--ink-4)' }}>{idx + 1}/{queue.length}</span></div>
+      </div>
+      <div className="card raised" style={{ maxWidth: 720, margin: '0 auto', padding: '56px 56px 38px' }}>
+        <div className="label" style={{ marginBottom: 10 }}>{item.type}</div>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, flexWrap: 'wrap' }}>
+          <span className="jp-disp" style={{ fontSize: 64 }}>{item.word}</span>
+          <span className="en-disp" style={{ fontSize: 20, color: 'var(--ink-4)', fontStyle: 'italic' }}>→ {item.target}</span>
+        </div>
+        <div className="en-disp" style={{ fontSize: 14, color: 'var(--ink-4)', fontStyle: 'italic', marginTop: 6 }}>"{item.en}"</div>
+        <div style={{ marginTop: 36 }}>
+          <input ref={inputRef} value={input} onChange={e => setInput(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') result ? next() : submit(); }} placeholder="…" readOnly={!!result}
+            style={{ width: '100%', padding: '18px 22px', fontFamily: 'var(--serif-jp)', fontSize: 30, fontWeight: 500, border: '1px solid', borderColor: result === 'right' ? 'var(--moss)' : result === 'wrong' ? 'var(--rouge)' : 'var(--line)', background: 'var(--paper-light)', color: 'var(--ink)', borderRadius: 10, outline: 'none', textAlign: 'center' }} />
+        </div>
+        <div style={{ marginTop: 22, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ minHeight: 28 }}>
+            {result === 'right' && <span className="en-disp" style={{ color: 'var(--moss)', fontSize: 18 }}>✓ Correct</span>}
+            {result === 'wrong' && <><span className="en-disp" style={{ color: 'var(--rouge)', fontSize: 18 }}>✗</span><span className="en-disp" style={{ color: 'var(--ink-4)', fontStyle: 'italic', marginLeft: 10 }}>→ <b className="jp" style={{ color: 'var(--ink)', fontSize: 22 }}>{item.ans}</b></span></>}
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            {!result && <button className="btn btn-ghost" onClick={skip}>Show answer</button>}
+            {!result ? <button className="btn btn-primary" onClick={submit}>Check · <span className="mono">↵</span></button> : <button className="btn btn-primary" onClick={next}>Next · <span className="mono">↵</span></button>}
+          </div>
+        </div>
+      </div>
+      <div style={{ textAlign: 'center', marginTop: 16, color: 'var(--ink-4)', fontSize: 12 }}>Type in Japanese (IME on). Hit <span className="mono">↵</span> to check / advance.</div>
+    </div>
+  );
+};
+
+function shuffle(a) { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+const buildMock = () => {
+  const vocab = shuffle(window.N3_VOCAB).slice(0, 8);
+  const vocabQ = vocab.map(v => { const distractors = shuffle(window.N3_VOCAB.filter(x => x.jp !== v.jp)).slice(0, 3).map(x => x.en); return { section: 'Vocabulary', prompt: v.jp, sub: v.kana, question: 'Choose the correct meaning.', choices: shuffle([v.en, ...distractors]), answer: v.en }; });
+  const gram = shuffle(window.N3_CLOZE).slice(0, 6).map(c => ({ section: 'Grammar', prompt: c.parts.map(p => p === 'BLANK' ? '＿＿＿' : p).join(''), sub: '"' + c.gloss + '"', question: 'Choose the grammar that fills the blank.', choices: c.choices, answer: c.answer }));
+  const r = window.N3_READING[Math.floor(Math.random() * window.N3_READING.length)];
+  const rText = r.tokens.map(t => typeof t === 'string' ? t : t.k).join('');
+  const readQ = [{ section: 'Reading', passage: rText, passageTitle: r.title, prompt: 'Comprehension', sub: r.en_title, question: 'Which best matches the passage?', choices: shuffle([r.translation.split('.')[0] + '.', 'A character regrets a decision and cannot move on.', 'The narrator describes a crowded train station at rush hour.', 'A debate about modern technology and traditional values.']), answer: r.translation.split('.')[0] + '.' }];
+  const dchoices = shuffle(window.N3_DIALOGUES).slice(0, 3);
+  const lstQ = dchoices.map(d => { const correct = d.en_title; const distractors = shuffle(window.N3_DIALOGUES.filter(x => x.en_title !== correct)).slice(0, 3).map(x => x.en_title); return { section: 'Listening', listenScript: d.turns.map(t => t.jp).join(' '), prompt: '▶  Press play, then choose', sub: 'Listen carefully — what is the topic?', question: 'What is this conversation about?', choices: shuffle([correct, ...distractors]), answer: correct }; });
+  return [...vocabQ, ...gram, ...readQ, ...lstQ];
+};
+
+const Mock = () => {
+  const [phase, setPhase] = uS2('intro');
+  const [qs, setQs] = uS2([]);
+  const [idx, setIdx] = uS2(0);
+  const [answers, setAnswers] = uS2({});
+  const [timeLeft, setTimeLeft] = uS2(20 * 60);
+  const tickRef = uR2(null);
+  uE2(() => { if (phase !== 'test') return; tickRef.current = setInterval(() => setTimeLeft(t => { if (t <= 1) { clearInterval(tickRef.current); finish(); return 0; } return t - 1; }), 1000); return () => clearInterval(tickRef.current); }, [phase]);
+  const begin = () => { setQs(buildMock()); setIdx(0); setAnswers({}); setTimeLeft(20 * 60); setPhase('test'); };
+  const finish = () => { clearInterval(tickRef.current); setPhase('result'); };
+  const pick = (c) => { setAnswers(a => ({ ...a, [idx]: c })); };
+  const fmt = (s) => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  if (phase === 'intro') return (
+    <div data-screen-label="10 Mock">
+      <div className="page-head"><div><h1 className="page-title"><span className="kanji">模試</span>Mock test</h1><div className="page-sub">A short JLPT N3-style mock</div></div></div>
+      <div className="card raised" style={{ maxWidth: 720, margin: '0 auto', padding: '40px 48px', textAlign: 'center' }}>
+        <div className="jp-disp" style={{ fontSize: 48 }}>準備はいい？</div>
+        <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', fontSize: 18, marginTop: 8 }}>"Ready to begin?"</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 18, margin: '36px 0' }}>
+          {[{ k: '語彙', en: 'Vocab', n: '8 Q' }, { k: '文法', en: 'Grammar', n: '6 Q' }, { k: '読解', en: 'Reading', n: '1 Q' }, { k: '聴解', en: 'Listening', n: '3 Q' }].map(s => (
+            <div key={s.k} style={{ padding: '16px 8px', border: '1px solid var(--line)', borderRadius: 8 }}>
+              <div className="jp-disp" style={{ fontSize: 28 }}>{s.k}</div>
+              <div className="mono" style={{ color: 'var(--ink-4)', marginTop: 6 }}>{s.en.toUpperCase()}</div>
+              <div className="en-disp" style={{ fontSize: 14, color: 'var(--ink-3)', marginTop: 6 }}>{s.n}</div>
+            </div>
+          ))}
+        </div>
+        <div className="en-disp" style={{ color: 'var(--ink-4)', fontStyle: 'italic', fontSize: 14, marginBottom: 24 }}>20-minute timer · 18 questions · partial credit by section</div>
+        <button className="btn btn-primary" onClick={begin} style={{ fontSize: 15, padding: '14px 28px' }}>Begin mock test →</button>
+      </div>
+    </div>
+  );
+  if (phase === 'result') {
+    const bySection = {};
+    qs.forEach((q, i) => { bySection[q.section] = bySection[q.section] || { right: 0, total: 0 }; bySection[q.section].total++; if (answers[i] === q.answer) bySection[q.section].right++; });
+    const totalRight = Object.values(bySection).reduce((a, s) => a + s.right, 0);
+    const pct = Math.round(100 * totalRight / qs.length);
+    return (
+      <div data-screen-label="10 Mock">
+        <div className="page-head"><div><h1 className="page-title"><span className="kanji">結果</span>Results</h1><div className="page-sub">Mock test · {fmt(20*60 - timeLeft)} spent</div></div><button className="btn" onClick={() => setPhase('intro')}>Try again →</button></div>
+        <div className="card raised" style={{ padding: '40px 48px', marginBottom: 22, textAlign: 'center' }}>
+          <div className="label" style={{ marginBottom: 12 }}>Overall</div>
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'baseline', gap: 16 }}>
+            <span className="en-disp" style={{ fontSize: 96, lineHeight: 1, color: pct >= 60 ? 'var(--moss)' : pct >= 40 ? 'var(--persimmon)' : 'var(--rouge)' }}>{pct}%</span>
+            <span className="mono" style={{ color: 'var(--ink-4)' }}>{totalRight} / {qs.length}</span>
+          </div>
+        </div>
+        <div className="card raised" style={{ padding: 0 }}>
+          {Object.entries(bySection).map(([sec, s], i) => (
+            <div key={sec} style={{ padding: '20px 28px', display: 'grid', gridTemplateColumns: '160px 1fr auto', gap: 22, alignItems: 'center', borderTop: i === 0 ? 'none' : '1px solid var(--line-soft)' }}>
+              <div className="en-disp" style={{ fontSize: 20 }}>{sec}</div>
+              <div style={{ height: 8, background: 'var(--line-soft)', borderRadius: 4, overflow: 'hidden' }}><div style={{ width: `${100 * s.right / s.total}%`, height: '100%', background: 'var(--ink)' }} /></div>
+              <span className="mono" style={{ color: 'var(--ink-3)' }}>{s.right}/{s.total}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop: 22 }}>
+          <div className="label" style={{ marginBottom: 10 }}>Question review</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {qs.map((q, i) => { const ok = answers[i] === q.answer; return (
+              <div key={i} className="card" style={{ display: 'grid', gridTemplateColumns: '24px 90px 1fr 1fr', gap: 14, padding: '12px 18px', alignItems: 'center' }}>
+                <span style={{ color: ok ? 'var(--moss)' : 'var(--rouge)' }}>{ok ? '✓' : '✗'}</span>
+                <span className="mono" style={{ color: 'var(--ink-4)' }}>{q.section.toUpperCase()}</span>
+                <span className="jp" style={{ fontSize: 14 }}>{q.prompt}</span>
+                <span style={{ fontSize: 12, color: 'var(--ink-3)' }}>your: <b className="jp">{answers[i] || '—'}</b> · ans: <b className="jp">{q.answer}</b></span>
+              </div>
+            ); })}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  const q = qs[idx]; const onPlay = () => q.listenScript && window.speakJP(q.listenScript, 0.9);
+  return (
+    <div data-screen-label="10 Mock">
+      <div className="page-head">
+        <div><h1 className="page-title"><span className="kanji">模試</span>Mock test</h1><div className="page-sub">Question {idx + 1} of {qs.length} · <b>{q.section}</b></div></div>
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}><span className="mono" style={{ color: timeLeft < 60 ? 'var(--rouge)' : 'var(--ink-3)', fontSize: 14 }}>⏱ {fmt(timeLeft)}</span><button className="btn" onClick={finish}>End early</button></div>
+      </div>
+      <div className="card raised" style={{ maxWidth: 820, margin: '0 auto', padding: '36px 48px' }}>
+        {q.passage && (<div style={{ padding: '18px 22px', background: 'var(--paper-light)', borderLeft: '2px solid var(--ink-3)', borderRadius: '0 6px 6px 0', marginBottom: 22 }}><div className="label" style={{ marginBottom: 6 }}>Passage · {q.passageTitle}</div><div className="jp" style={{ fontSize: 17, lineHeight: 1.8 }}>{q.passage}</div></div>)}
+        {q.listenScript && (<div style={{ padding: '18px 22px', background: 'var(--paper-light)', borderLeft: '2px solid var(--indigo)', borderRadius: '0 6px 6px 0', marginBottom: 22, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}><div><div className="label">Audio</div><div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)' }}>You may replay the clip.</div></div><button className="btn btn-primary" onClick={onPlay}>▶ Play</button></div>)}
+        <div className="label" style={{ marginBottom: 6 }}>{q.section}</div>
+        <div className="jp-disp" style={{ fontSize: 30, lineHeight: 1.4 }}>{q.prompt}</div>
+        {q.sub && <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', marginTop: 4 }}>{q.sub}</div>}
+        <div className="en-disp" style={{ marginTop: 18, color: 'var(--ink-2)', fontSize: 16 }}>{q.question}</div>
+        <div style={{ marginTop: 18, display: 'grid', gap: 10 }}>
+          {q.choices.map((c, i) => { const picked = answers[idx] === c; return (
+            <button key={i} onClick={() => pick(c)} style={{ padding: '14px 18px', borderRadius: 8, textAlign: 'left', border: '1px solid', borderColor: picked ? 'var(--ink)' : 'var(--line)', background: picked ? 'rgba(26,24,20,.05)' : 'var(--card)', cursor: 'pointer', display: 'grid', gridTemplateColumns: '28px 1fr', gap: 12, alignItems: 'center' }}>
+              <span className="mono" style={{ color: 'var(--ink-4)' }}>{String.fromCharCode(65 + i)}</span>
+              <span style={{ fontFamily: /[　-龯]/.test(c) ? 'var(--serif-jp)' : 'var(--serif-en)', fontSize: 16 }}>{c}</span>
+            </button>
+          ); })}
+        </div>
+        <div style={{ marginTop: 26, paddingTop: 18, borderTop: '1px dashed var(--line)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <button className="btn" onClick={() => setIdx(i => Math.max(0, i - 1))} disabled={idx === 0}>← Prev</button>
+          <div style={{ display: 'flex', gap: 4 }}>{qs.map((_, i) => (<span key={i} onClick={() => setIdx(i)} style={{ width: 10, height: 10, borderRadius: '50%', background: answers[i] ? 'var(--ink)' : 'var(--line)', outline: i === idx ? '2px solid var(--ink)' : 'none', outlineOffset: 2, cursor: 'pointer' }} />))}</div>
+          {idx === qs.length - 1 ? <button className="btn btn-primary" onClick={finish}>Submit ✓</button> : <button className="btn btn-primary" onClick={() => setIdx(i => i + 1)}>Next →</button>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const ImportExport = () => {
+  const [csv, setCsv] = uS2('');
+  const [imported, setImported] = uS2([]);
+  const [imsg, setImsg] = uS2('');
+  const fileRef = uR2(null);
+  const IMPORT_KEY = 'sumi.n3.userdeck.v1';
+  uE2(() => { try { setImported(JSON.parse(localStorage.getItem(IMPORT_KEY) || '[]')); } catch {} }, []);
+  const parseCsv = (txt) => { const rows = txt.split(/\r?\n/).map(l => l.trim()).filter(Boolean); return rows.map(r => { const cols = r.split(/\t|,/).map(c => c.trim()); const [jp, kana, en, ex_jp = '', ex_en = ''] = cols; return { jp, kana, en, pos: 'user', ex: { jp: ex_jp, en: ex_en } }; }).filter(x => x.jp && x.en); };
+  const doImport = () => { const parsed = parseCsv(csv); if (!parsed.length) { setImsg('No valid rows found. Each line: word, reading, meaning, [example_jp], [example_en]'); return; } const merged = [...imported, ...parsed]; localStorage.setItem(IMPORT_KEY, JSON.stringify(merged)); setImported(merged); window.N3_VOCAB = (window.N3_VOCAB || []).concat(parsed); setCsv(''); setImsg(`Added ${parsed.length} item${parsed.length === 1 ? '' : 's'} to your deck.`); };
+  const clearImport = () => { localStorage.removeItem(IMPORT_KEY); setImported([]); setImsg('User deck cleared.'); };
+  const onFile = async (e) => { const f = e.target.files?.[0]; if (!f) return; setCsv(await f.text()); };
+  const exportProgress = () => { const data = { exported: new Date().toISOString(), srs: SRS.load(), userDeck: imported, app: 'sumi.n3', version: 1 }; const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `sumi-n3-progress-${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(url); };
+  const importProgress = async (e) => { const f = e.target.files?.[0]; if (!f) return; try { const data = JSON.parse(await f.text()); if (data.srs) { localStorage.setItem(SRS_KEY, JSON.stringify(data.srs)); } if (data.userDeck) { localStorage.setItem(IMPORT_KEY, JSON.stringify(data.userDeck)); setImported(data.userDeck); } setImsg('Progress restored — switch to Cards to see it.'); } catch (err) { setImsg('Could not parse file.'); } };
+  const srs = SRS.load(); const srsCount = Object.keys(srs).length; const totalReps = Object.values(srs).reduce((a, s) => a + (s.reps || 0), 0);
+  return (
+    <div data-screen-label="11 Import">
+      <div className="page-head"><div><h1 className="page-title"><span className="kanji">入出</span>Import &amp; export</h1><div className="page-sub">Bring your own list · save your progress</div></div></div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 22, marginBottom: 22 }}>
+        <div className="card raised">
+          <div className="label" style={{ marginBottom: 8 }}>Import vocab list</div>
+          <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', marginBottom: 14, fontSize: 14 }}>Paste CSV or TSV. Each row: <span className="mono">word, reading, meaning, [example_jp], [example_en]</span></div>
+          <textarea value={csv} onChange={e => setCsv(e.target.value)} placeholder={'例:\n調子,ちょうし,condition,...\n機嫌,きげん,mood,...'} style={{ width: '100%', minHeight: 180, padding: 14, fontFamily: 'var(--mono)', fontSize: 12, lineHeight: 1.7, background: 'var(--paper-light)', border: '1px solid var(--line)', borderRadius: 8, resize: 'vertical', color: 'var(--ink)' }} />
+          <div style={{ marginTop: 12, display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <button className="btn btn-primary" onClick={doImport}>Add to deck</button>
+            <button className="btn" onClick={() => fileRef.current?.click()}>Load .csv / .tsv</button>
+            <input ref={fileRef} type="file" accept=".csv,.tsv,.txt" style={{ display: 'none' }} onChange={onFile} />
+            {imported.length > 0 && <button className="btn btn-ghost" onClick={clearImport}>Clear user deck</button>}
+            {imsg && <span className="en-disp" style={{ fontStyle: 'italic', color: 'var(--moss)', fontSize: 13 }}>{imsg}</span>}
+          </div>
+          {imported.length > 0 && (<div style={{ marginTop: 14, padding: 12, background: 'var(--paper-light)', borderRadius: 8, fontSize: 12 }}><span className="mono" style={{ color: 'var(--ink-4)' }}>USER DECK · {imported.length} items</span><div style={{ marginTop: 6, color: 'var(--ink-3)' }}>{imported.slice(0, 5).map((x, i) => <span key={i} className="jp" style={{ marginRight: 10 }}>{x.jp}</span>)}{imported.length > 5 && <span className="mono">+{imported.length - 5} more</span>}</div></div>)}
+        </div>
+        <div className="card raised">
+          <div className="label" style={{ marginBottom: 8 }}>Progress</div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 22 }}>
+            <div><div className="mono" style={{ color: 'var(--ink-4)' }}>CARDS STUDIED</div><div className="en-disp" style={{ fontSize: 36, lineHeight: 1 }}>{srsCount}</div></div>
+            <div><div className="mono" style={{ color: 'var(--ink-4)' }}>TOTAL REVIEWS</div><div className="en-disp" style={{ fontSize: 36, lineHeight: 1 }}>{totalReps}</div></div>
+          </div>
+          <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-3)', marginBottom: 14, fontSize: 14 }}>Save a JSON snapshot of your SRS state and imported deck. Restore from another device or after clearing browser data.</div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={exportProgress}>↓ Export progress</button>
+            <label className="btn" style={{ cursor: 'pointer' }}>↑ Restore from JSON<input type="file" accept=".json" style={{ display: 'none' }} onChange={importProgress} /></label>
+          </div>
+        </div>
+      </div>
+      <div className="card">
+        <div className="label" style={{ marginBottom: 10 }}>Format reference</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 12, lineHeight: 1.8, color: 'var(--ink-3)', whiteSpace: 'pre-wrap' }}>{`# CSV / TSV — one entry per line, commas or tabs separate\n# columns: word, reading, meaning, example_jp (opt), example_en (opt)\n\n調子, ちょうし, condition, 体の調子が悪い, My condition is bad\n機嫌, きげん, mood\n...\n\n# Anki tip: in your deck → File → Export → "Notes in Plain Text"\n# uncheck HTML; the result drops in here cleanly.`}</div>
+      </div>
+    </div>
+  );
+};
+
+Object.assign(window, { Cards: Cards2, Listening: Listening2, Cloze, Conjugate, Mock, ImportExport, SRS });
+</script>
+
+<!-- ── PERSONAL LAYER (onboarding, real stats, dynamic Today) ── -->
+<script type="text/babel">
+(() => {
+  const { useState, useEffect } = React;
+  const KEY = 'sumi.n3.personal.v1';
+  const todayStr = () => new Date().toISOString().slice(0, 10);
+  const defaults = () => ({ name: '', started: null, target: '', lastStudy: null, streak: 0, days: {}, daily: {}, seenKanji: [], seenGrammar: [], mockScore: null });
+  const load = () => { try { return { ...defaults(), ...JSON.parse(localStorage.getItem(KEY) || '{}') }; } catch { return defaults(); } };
+  const subs = new Set();
+  const emit = () => subs.forEach(fn => { try { fn(); } catch {} });
+  const save = (s) => { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch {} emit(); };
+  const computeStreak = (s) => { let n = 0; const d = new Date(); while (true) { const k = d.toISOString().slice(0, 10); if (s.days[k]) { n++; d.setDate(d.getDate() - 1); } else break; } return n; };
+
+  const Stats = {
+    get: load,
+    subscribe(fn) { subs.add(fn); return () => subs.delete(fn); },
+    touch(kind, n = 1) { const s = load(); const k = todayStr(); if (n > 0) s.days[k] = (s.days[k] || 0) + n; if (kind) { s.daily[k] = s.daily[k] || {}; s.daily[k][kind] = true; } s.lastStudy = k; s.streak = computeStreak(s); save(s); },
+    setName(name, target) { const s = load(); if (!s.started) s.started = Date.now(); s.name = name; if (target) s.target = target; save(s); },
+    reset() { try { localStorage.removeItem(KEY); localStorage.removeItem('sumi.n3.srs.v1'); localStorage.removeItem('sumi.n3.userdeck.v1'); } catch {} emit(); },
+    heat14() { const s = load(); const out = []; const d = new Date(); d.setDate(d.getDate() - 13); for (let i = 0; i < 14; i++) { out.push(s.days[d.toISOString().slice(0, 10)] || 0); d.setDate(d.getDate() + 1); } return out; },
+    dayN() { const s = load(); if (!s.started) return 0; return Math.floor((Date.now() - s.started) / 86400000) + 1; },
+  };
+  window.SumiStats = Stats;
+
+  const Onboarding = () => {
+    const [s, setS] = useState(Stats.get());
+    useEffect(() => Stats.subscribe(() => setS(Stats.get())), []);
+    const [name, setName] = useState('');
+    const [target, setTarget] = useState('');
+    if (s.name) return null;
+    const submit = (e) => { if (e) e.preventDefault(); const n = name.trim() || '友'; Stats.setName(n, target); };
+    return (
+      <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(20,18,15,.62)', backdropFilter: 'blur(6px)', display: 'grid', placeItems: 'center', padding: 28 }}>
+        <form onSubmit={submit} className="card raised" style={{ maxWidth: 560, width: '100%', padding: 44 }}>
+          <div className="jp-disp" style={{ fontSize: 56, lineHeight: 1, marginBottom: 6 }}>初めまして</div>
+          <div className="label" style={{ marginBottom: 22 }}>Hajimemashite — nice to meet you.</div>
+          <p className="en-disp" style={{ fontSize: 17, color: 'var(--ink-2)', marginBottom: 28, lineHeight: 1.55 }}>This is your study journal. It starts blank — no streak, no progress, no fake numbers. Your data fills in only as you actually study.</p>
+          <div style={{ marginBottom: 18 }}>
+            <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 6 }}>WHAT SHOULD WE CALL YOU?</div>
+            <input autoFocus value={name} onChange={e => setName(e.target.value)} placeholder="Your name" style={{ width: '100%', padding: '12px 14px', border: '1px solid var(--line)', background: 'var(--paper-light)', fontFamily: 'inherit', fontSize: 17, borderRadius: 4, color: 'var(--ink)' }} />
+          </div>
+          <div style={{ marginBottom: 28 }}>
+            <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 6 }}>JLPT N3 TARGET DATE · OPTIONAL</div>
+            <input type="date" value={target} onChange={e => setTarget(e.target.value)} style={{ width: '100%', padding: '12px 14px', border: '1px solid var(--line)', background: 'var(--paper-light)', fontFamily: 'inherit', fontSize: 16, borderRadius: 4, color: 'var(--ink)' }} />
+          </div>
+          <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '14px', fontSize: 15 }}>一日目 · Begin day one →</button>
+          <div className="mono" style={{ marginTop: 16, color: 'var(--ink-4)', textAlign: 'center' }}>千里の道も一歩から · a journey of 1000 ri begins with one step</div>
+        </form>
+      </div>
+    );
+  };
+  window.Onboarding = Onboarding;
+
+  const mountOnboarding = () => {
+    if (document.getElementById('sumi-onboarding-root')) return;
+    if (!document.body) { setTimeout(mountOnboarding, 50); return; }
+    const div = document.createElement('div');
+    div.id = 'sumi-onboarding-root';
+    document.body.appendChild(div);
+    ReactDOM.createRoot(div).render(<Onboarding />);
+  };
+  if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', mountOnboarding); } else { mountOnboarding(); }
+
+  const syncStreak = () => { const s = load(); document.querySelectorAll('.streak-num').forEach(el => { const v = String(s.streak); if (el.textContent !== v) el.textContent = v; }); };
+  const mountResetLink = () => {
+    if (document.getElementById('sumi-reset-link')) return;
+    const footer = document.querySelector('.sidebar-footer'); if (!footer) return;
+    const wrap = document.createElement('div'); wrap.id = 'sumi-reset-link';
+    wrap.style.cssText = 'margin-top:14px;text-align:center;font-family:"JetBrains Mono",ui-monospace,monospace;font-size:10px;letter-spacing:.08em;color:var(--ink-4);cursor:pointer;text-transform:uppercase;padding:6px;border-top:1px dashed var(--line-soft);';
+    wrap.textContent = '↻  start over';
+    wrap.onmouseenter = () => { wrap.style.color = 'var(--rouge, var(--persimmon))'; };
+    wrap.onmouseleave = () => { wrap.style.color = 'var(--ink-4)'; };
+    wrap.onclick = () => { if (confirm('Reset everything — name, streak, SRS, imported deck, daily progress? This cannot be undone.')) { Stats.reset(); location.reload(); } };
+    footer.appendChild(wrap);
+  };
+  setInterval(() => { syncStreak(); mountResetLink(); }, 600);
+  Stats.subscribe(syncStreak);
+
+  const origSet = localStorage.setItem.bind(localStorage);
+  let lastTotalReps = null;
+  localStorage.setItem = function (k, v) {
+    origSet(k, v);
+    if (k === 'sumi.n3.srs.v1') {
+      try { const cur = JSON.parse(v); const totalReps = Object.values(cur).reduce((a, c) => a + (c.reps || 0) + (c.lapses || 0), 0); if (lastTotalReps !== null && totalReps > lastTotalReps) { Stats.touch('cards', totalReps - lastTotalReps); } lastTotalReps = totalReps; } catch {}
+    }
+  };
+  try { const cur = JSON.parse(localStorage.getItem('sumi.n3.srs.v1') || '{}'); lastTotalReps = Object.values(cur).reduce((a, c) => a + (c.reps || 0) + (c.lapses || 0), 0); } catch {}
+
+  const Today = ({ onJump }) => {
+    const [s, setS] = useState(Stats.get());
+    useEffect(() => Stats.subscribe(() => setS(Stats.get())), []);
+    const today = new Date();
+    const dayName = today.toLocaleDateString('en-US', { weekday: 'long' });
+    const dateLine = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const done = s.daily[todayStr()] || {};
+    const plan = [
+      { id: 'cards',     k: '札', label: 'Vocab review',    target: 'cards',     time: '~9 min' },
+      { id: 'kanji',     k: '漢', label: 'New kanji',       target: 'kanji',     time: '~7 min' },
+      { id: 'grammar',   k: '文', label: 'Grammar drill',   target: 'grammar',   time: '~6 min' },
+      { id: 'reading',   k: '読', label: 'Reading passage', target: 'reading',   time: '~5 min' },
+      { id: 'listening', k: '聴', label: 'Listening lines', target: 'listening', time: '~4 min' },
+    ];
+    const doneCount = plan.filter(p => done[p.id]).length;
+    const handleTile = (p) => { Stats.touch(p.id, 1); onJump(p.target); };
+    const toggleTile = (e, p) => { e.stopPropagation(); const cur = Stats.get(); const dk = todayStr(); cur.daily[dk] = cur.daily[dk] || {}; const was = !!cur.daily[dk][p.id]; cur.daily[dk][p.id] = !was; cur.days[dk] = Math.max(0, (cur.days[dk] || 0) + (was ? -1 : 1)); cur.streak = computeStreak(cur); save(cur); };
+    const heat = Stats.heat14();
+    const dayN = Stats.dayN();
+    const wod = (() => { const pool = window.N3_VOCAB || []; if (!pool.length) return null; const seed = today.getFullYear() * 1000 + today.getMonth() * 32 + today.getDate(); return pool[seed % pool.length]; })();
+    const srs = (() => { try { return JSON.parse(localStorage.getItem('sumi.n3.srs.v1') || '{}'); } catch { return {}; } })();
+    const vocabKnown = Object.values(srs).filter(c => (c.reps || 0) >= 2).length;
+    const vocabSeen  = Object.keys(srs).length;
+    const vocabTotal = (window.N3_VOCAB || []).length || 0;
+    const kanjiTotal = (window.N3_KANJI || []).length || 0;
+    const grammarTotal = (window.N3_GRAMMAR || []).length || 0;
+    const corpus = [
+      { label: 'Vocab known',     cur: vocabKnown,                   total: vocabTotal,   color: 'var(--ink)',       sub: `${vocabSeen} seen` },
+      { label: 'Kanji learned',   cur: (s.seenKanji || []).length,   total: kanjiTotal,   color: 'var(--indigo)' },
+      { label: 'Grammar points',  cur: (s.seenGrammar || []).length, total: grammarTotal, color: 'var(--persimmon)' },
+      { label: 'Mock test score', cur: s.mockScore || 0,             total: 180,          color: 'var(--moss)' },
+    ];
+    const greet = (() => { const hour = today.getHours(); const g = hour < 5 ? 'こんばんは' : hour < 11 ? 'おはよう' : hour < 18 ? 'こんにちは' : 'こんばんは'; return `${g}, ${s.name || '友'}`; })();
+    const daysToTarget = s.target ? Math.max(0, Math.ceil((new Date(s.target).getTime() - Date.now()) / 86400000)) : null;
+
+    return (
+      <div data-screen-label="01 Today">
+        <div className="page-head">
+          <div>
+            <h1 className="page-title"><span className="kanji">本日</span>Today</h1>
+            <div className="page-sub"><span className="jp">{greet}</span> · {dayN > 0 ? `Day ${dayN}` : 'Day 1'} · {dayName}, {dateLine}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button className="btn"><span className="mono">JLPT N3</span></button>
+            <button className="btn btn-primary" onClick={() => onJump('cards')}>Begin review →</button>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 22, marginBottom: 22 }}>
+          <div className="card raised" style={{ padding: 0 }}>
+            <div style={{ padding: '20px 24px 14px', borderBottom: '1px solid var(--line-soft)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div><div className="label">Daily plan</div><div className="en-disp" style={{ fontSize: 22, marginTop: 4 }}>5 tasks · ≈31 min</div></div>
+              <div style={{ textAlign: 'right' }}><div className="mono" style={{ color: 'var(--ink-4)' }}>PROGRESS</div><div className="en-disp" style={{ fontSize: 22, color: doneCount === 5 ? 'var(--moss)' : 'var(--ink-2)' }}>{doneCount} / 5</div></div>
+            </div>
+            <div>
+              {plan.map((p, i) => {
+                const isDone = !!done[p.id];
+                return (
+                  <div key={p.id} onClick={() => handleTile(p)} style={{ display: 'grid', gridTemplateColumns: '54px 1fr auto auto', alignItems: 'center', gap: 18, padding: '16px 24px', borderTop: i === 0 ? 'none' : '1px solid var(--line-soft)', cursor: 'pointer', transition: 'background .12s' }}
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(26,24,20,.025)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>
+                    <div style={{ width: 44, height: 44, borderRadius: 8, background: isDone ? 'var(--ink)' : 'var(--paper-warm)', color: isDone ? 'var(--paper-light)' : 'var(--ink-2)', display: 'grid', placeItems: 'center', fontFamily: 'var(--serif-jp)', fontWeight: 600, fontSize: 22, border: isDone ? 'none' : '1px solid var(--line)', transition: 'all .2s' }}>{p.k}</div>
+                    <div><div style={{ fontWeight: 600, fontSize: 14, color: 'var(--ink)' }}>{p.label}</div><div className="mono" style={{ color: 'var(--ink-4)', marginTop: 2 }}>{isDone ? 'completed today · tap → revisit' : `not yet · ${p.time}`}</div></div>
+                    <span className="mono" onClick={e => toggleTile(e, p)} title="tap to toggle" style={{ color: isDone ? 'var(--moss)' : 'var(--ink-4)', padding: '4px 6px', borderRadius: 4 }}>{isDone ? '● DONE' : '○ TODO'}</span>
+                    <span style={{ color: 'var(--ink-4)' }}>→</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <div className="card raised" style={{ marginBottom: 18 }}>
+              <div className="label" style={{ marginBottom: 12 }}>Word of the day · 今日の言葉</div>
+              {wod ? (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6, gap: 12 }}>
+                    <div className="jp-disp" style={{ fontSize: 46, lineHeight: 1.1 }}>{wod.jp}</div>
+                    {window.PlayBtn && <window.PlayBtn text={wod.jp} />}
+                  </div>
+                  <div className="jp" style={{ color: 'var(--ink-4)', fontSize: 14, marginBottom: 14 }}>{wod.kana}</div>
+                  <div className="en-disp" style={{ fontSize: 17, color: 'var(--ink-2)', fontStyle: 'italic' }}>"{wod.en}"</div>
+                  {wod.ex && (
+                    <div style={{ marginTop: 14, paddingTop: 12, borderTop: '1px dashed var(--line)' }}>
+                      <div className="jp" style={{ fontSize: 16 }}>{wod.ex.jp}</div>
+                      {wod.ex.en && (
+                        <div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', fontSize: 13, marginTop: 4 }}>"{wod.ex.en}"</div>
+                      )}
+                    </div>
+                  )}
+                </>
+              ) : (<div className="en-disp" style={{ color: 'var(--ink-4)' }}>Vocab pool empty.</div>)}
+            </div>
+
+            <div className="card">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
+                <div className="label">Last 14 days</div>
+                <div className="mono" style={{ color: s.streak > 0 ? 'var(--ink-2)' : 'var(--ink-4)' }}>STREAK · {s.streak}</div>
+              </div>
+              <div style={{ display: 'flex', gap: 4, alignItems: 'flex-end', height: 56 }}>
+                {heat.map((h, i) => (<div key={i} style={{ flex: 1, height: `${10 + Math.min(h, 12) * 4}px`, background: h === 0 ? 'var(--line-soft)' : h >= 8 ? 'var(--ink)' : 'var(--ink-3)', opacity: h === 0 ? .5 : 1, borderRadius: 2 }} />))}
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                <span className="mono" style={{ color: 'var(--ink-4)' }}>2 wks ago</span>
+                <span className="mono" style={{ color: 'var(--ink-4)' }}>today</span>
+              </div>
+              {s.streak === 0 && (<div className="en-disp" style={{ fontStyle: 'italic', color: 'var(--ink-4)', fontSize: 13, marginTop: 12, textAlign: 'center' }}>Your streak begins the first time you study today.</div>)}
+            </div>
+          </div>
+        </div>
+
+        <div className="card raised">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 16 }}>
+            <div className="label">N3 corpus progress</div>
+            {daysToTarget !== null && (<div className="mono" style={{ color: 'var(--ink-4)' }}>TARGET · {new Date(s.target).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · {daysToTarget} days</div>)}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 32 }}>
+            {corpus.map(st => (
+              <div key={st.label}>
+                <div className="mono" style={{ color: 'var(--ink-4)', marginBottom: 6 }}>{st.label.toUpperCase()}</div>
+                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 8 }}><span className="en-disp" style={{ fontSize: 36, lineHeight: 1, color: st.color }}>{st.cur}</span><span className="mono" style={{ color: 'var(--ink-4)' }}>/ {st.total}</span></div>
+                <div style={{ height: 4, background: 'var(--line-soft)', borderRadius: 2, overflow: 'hidden' }}><div style={{ width: `${st.total ? Math.min(100, (st.cur / st.total) * 100) : 0}%`, height: '100%', background: st.color, transition: 'width .5s' }} /></div>
+                {st.sub && <div className="mono" style={{ color: 'var(--ink-4)', marginTop: 6 }}>{st.sub}</div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  };
+  window.Today = Today;
+})();
+</script>
+
+<!-- ── APP (root) ── -->
+<script type="text/babel">
+const { useState: useS, useEffect: useE } = React;
+
+const NAV = [
+  { id: 'today',     label: 'Today',           glyph: '本', badge: '·' },
+  { id: 'cards',     label: 'Cards',            glyph: '札', badge: 'SRS' },
+  { id: 'kanji',     label: 'Kanji',            glyph: '漢', badge: '' },
+  { id: 'grammar',   label: 'Grammar',          glyph: '文', badge: '' },
+  { id: 'reading',   label: 'Reading',          glyph: '読', badge: '' },
+  { id: 'listening', label: 'Listening',        glyph: '聴', badge: '' },
+  { id: 'phrases',   label: 'Phrases',          glyph: '慣', badge: '' },
+  { id: 'cloze',     label: 'Cloze',            glyph: '穴', badge: '' },
+  { id: 'conjugate', label: 'Conjugate',        glyph: '活', badge: '' },
+  { id: 'mock',      label: 'Mock test',        glyph: '模', badge: 'N3' },
+  { id: 'import',    label: 'Import / export',  glyph: '入', badge: '' }
+];
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "washi",
+  "showFurigana": true,
+  "ttsSpeed": 0.9,
+  "density": "comfortable"
+}/*EDITMODE-END*/;
+
+const PALETTES = {
+  washi: { name: 'Washi (default)', vars: { '--paper': '#ece4d3', '--paper-warm': '#e6dcc6', '--paper-light': '#f4eddd', '--card': '#f7f1e1', '--card-raised': '#fbf6e8', '--ink': '#1a1814', '--ink-2': '#36322a', '--ink-3': '#5b5448', '--ink-4': '#8a8170', '--line': '#cfc3a8', '--line-soft': '#ddd1b6', '--indigo': '#3b5573', '--persimmon': '#b3563a', '--moss': '#6c7a4a', '--gold': '#a8884b', '--rouge': '#8a3a3a' } },
+  sumi:  { name: 'Sumi (dark)',     vars: { '--paper': '#1c1a16', '--paper-warm': '#23211c', '--paper-light': '#2a2722', '--card': '#26231d', '--card-raised': '#2c2922', '--ink': '#ece4d3', '--ink-2': '#cabd9d', '--ink-3': '#a89d80', '--ink-4': '#766e5c', '--line': '#3d382e', '--line-soft': '#332f27', '--indigo': '#7d97b6', '--persimmon': '#d77757', '--moss': '#a4b07a', '--gold': '#cba776', '--rouge': '#c87575' } },
+  shoji: { name: 'Shoji (cool)',    vars: { '--paper': '#e6e8e4', '--paper-warm': '#dde0db', '--paper-light': '#eef0ec', '--card': '#f1f3ef', '--card-raised': '#f6f8f4', '--ink': '#141816', '--ink-2': '#2c322e', '--ink-3': '#525853', '--ink-4': '#838985', '--line': '#c5cac3', '--line-soft': '#d3d7d1', '--indigo': '#3a567d', '--persimmon': '#a85a43', '--moss': '#5c7048', '--gold': '#9a8048', '--rouge': '#823c3c' } }
+};
+
+const App = () => {
+  const [route, setRoute] = useS('today');
+  const [tweaks, setTweak] = window.useTweaks(TWEAK_DEFAULTS);
+
+  useE(() => {
+    const p = PALETTES[tweaks.palette] || PALETTES.washi;
+    Object.entries(p.vars).forEach(([k, v]) => document.documentElement.style.setProperty(k, v));
+  }, [tweaks.palette]);
+
+  useE(() => {
+    document.documentElement.style.setProperty('--row-pad', tweaks.density === 'compact' ? '10px' : '16px');
+  }, [tweaks.density]);
+
+  useE(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => window.speechSynthesis.getVoices();
+    }
+  }, []);
+
+  const screens = {
+    today:     <Today onJump={setRoute} />,
+    cards:     <Cards />,
+    kanji:     <Kanji />,
+    grammar:   <Grammar />,
+    reading:   <Reading />,
+    listening: <Listening />,
+    phrases:   <Phrases />,
+    cloze:     <Cloze />,
+    conjugate: <Conjugate />,
+    mock:      <Mock />,
+    import:    <ImportExport />
+  };
+
+  const renderItem = (n) => (
+    <div key={n.id} className={'nav-item' + (route === n.id ? ' active' : '')} onClick={() => setRoute(n.id)}>
+      <span className="glyph">{n.glyph}</span>
+      <span>{n.label}</span>
+      {n.badge && <span className="badge">{n.badge}</span>}
+    </div>
+  );
+
+  return (
+    <div className="app">
+      <aside className="sidebar">
+        <div className="brand">
+          <div className="enso" />
+          <div className="brand-name">墨<span className="sub">Sumi · N3</span></div>
+        </div>
+        <div className="nav">
+          <div className="nav-section">Study</div>
+          {NAV.slice(0, 4).map(renderItem)}
+          <div className="nav-section">Practice</div>
+          {NAV.slice(4, 9).map(renderItem)}
+          <div className="nav-section">Test &amp; data</div>
+          {NAV.slice(9).map(renderItem)}
+        </div>
+        <div className="sidebar-footer">
+          <div className="streak-card">
+            <div className="streak-num">0</div>
+            <div className="streak-label"><b>day streak</b>連続学習日数</div>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '14px 8px 0', fontSize: 11, color: 'var(--ink-4)' }}>
+            <span className="mono">Goal · 30 min/day</span>
+            <span className="mono">14:21</span>
+          </div>
+        </div>
+      </aside>
+      <main className="main">{screens[route]}</main>
+      <window.TweaksPanel title="Tweaks">
+        <window.TweakSection label="Theme">
+          <window.TweakRadio label="Palette" value={tweaks.palette} onChange={v => setTweak('palette', v)} options={['washi', 'sumi', 'shoji']} />
+          <window.TweakRadio label="Density" value={tweaks.density} onChange={v => setTweak('density', v)} options={['comfortable', 'compact']} />
+        </window.TweakSection>
+        <window.TweakSection label="Reading">
+          <window.TweakToggle label="Furigana by default" value={tweaks.showFurigana} onChange={v => setTweak('showFurigana', v)} />
+        </window.TweakSection>
+        <window.TweakSection label="Audio">
+          <window.TweakSlider label="TTS speed" value={tweaks.ttsSpeed} min={0.5} max={1.2} step={0.05} unit="×" onChange={v => setTweak('ttsSpeed', v)} />
+        </window.TweakSection>
+      </window.TweaksPanel>
+    </div>
+  );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
