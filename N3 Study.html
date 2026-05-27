@@ -3337,6 +3337,755 @@ window.AudioQuiz = AudioQuiz;
 })();
 </script>
 
+<script>
+// ── ANIME VOCAB ──────────────────────────────────────────────────────────────
+window.ANIME_VOCAB = [
+  { jp: 'やばい', kana: 'やばい', en: 'dangerous; crazy; amazing (slang)', pos: 'adj', ex: { jp: 'これはやばい状況だ。', en: "This is a crazy situation." } },
+  { jp: 'なるほど', kana: 'なるほど', en: 'I see; indeed; that makes sense', pos: 'exp', ex: { jp: 'なるほど、そういうことか。', en: "I see, so that's how it is." } },
+  { jp: 'うるさい', kana: 'うるさい', en: 'noisy; loud; shut up', pos: 'adj', ex: { jp: 'うるさい！静かにしろ！', en: "Shut up! Be quiet!" } },
+  { jp: 'まじで', kana: 'まじで', en: 'seriously; for real', pos: 'adv', ex: { jp: 'まじで？信じられない。', en: "Seriously? I can't believe it." } },
+  { jp: 'まさか', kana: 'まさか', en: 'no way; surely not; I never thought', pos: 'exp', ex: { jp: 'まさか、君が裏切るとは。', en: "I never thought you would betray me." } },
+  { jp: 'ちくしょう', kana: 'ちくしょう', en: 'damn it; blast it', pos: 'exp', ex: { jp: 'ちくしょう、負けてしまった。', en: "Damn it, I lost." } },
+  { jp: 'バカ', kana: 'ばか', en: 'idiot; fool; stupid', pos: 'n', ex: { jp: 'お前はバカか！', en: "Are you an idiot?!" } },
+  { jp: '仕方ない', kana: 'しかたない', en: "can't be helped; nothing to be done", pos: 'exp', ex: { jp: '仕方ない、やるしかない。', en: "Can't be helped, we just have to do it." } },
+  { jp: 'ついに', kana: 'ついに', en: 'finally; at last; in the end', pos: 'adv', ex: { jp: 'ついに魔王を倒した！', en: "We finally defeated the demon king!" } },
+  { jp: '絶対', kana: 'ぜったい', en: 'absolutely; definitely; no matter what', pos: 'adv', ex: { jp: '絶対に諦めない！', en: "I absolutely won't give up!" } },
+  { jp: '覚悟', kana: 'かくご', en: 'resolve; readiness; preparedness', pos: 'n', ex: { jp: '覚悟はいいか？', en: "Are you ready for this?" } },
+  { jp: '魔法', kana: 'まほう', en: 'magic; spell', pos: 'n', ex: { jp: '彼女は強力な魔法を使う。', en: "She uses powerful magic." } },
+  { jp: '仲間', kana: 'なかま', en: 'companion; friend; comrade', pos: 'n', ex: { jp: '仲間を守るために戦う。', en: "I fight to protect my companions." } },
+  { jp: '敵', kana: 'てき', en: 'enemy; opponent; rival', pos: 'n', ex: { jp: '敵が攻めてきた。', en: "The enemy is attacking." } },
+  { jp: '命', kana: 'いのち', en: "life; soul; one's existence", pos: 'n', ex: { jp: '命をかけて戦う。', en: "I fight with my life on the line." } },
+  { jp: '運命', kana: 'うんめい', en: 'fate; destiny; doom', pos: 'n', ex: { jp: 'これが私たちの運命だ。', en: "This is our destiny." } },
+  { jp: '使命', kana: 'しめい', en: 'mission; duty; calling', pos: 'n', ex: { jp: '私の使命を果たさなければ。', en: "I must fulfill my mission." } },
+  { jp: '魔王', kana: 'まおう', en: 'demon king; dark lord', pos: 'n', ex: { jp: '魔王を倒すのが勇者の使命だ。', en: "Defeating the demon king is the hero's mission." } },
+  { jp: '勇者', kana: 'ゆうしゃ', en: 'brave hero; champion', pos: 'n', ex: { jp: '伝説の勇者が現れた。', en: "The legendary hero appeared." } },
+  { jp: '倒す', kana: 'たおす', en: 'to defeat; to knock down; to overthrow', pos: 'v', ex: { jp: '敵を倒して前進する。', en: "Defeat the enemy and advance." } },
+  { jp: '放課後', kana: 'ほうかご', en: 'after school', pos: 'n', ex: { jp: '放課後、一緒に帰ろう。', en: "Let's go home together after school." } },
+  { jp: '文化祭', kana: 'ぶんかさい', en: 'school cultural festival', pos: 'n', ex: { jp: '文化祭の準備で忙しい。', en: "We're busy preparing for the cultural festival." } },
+  { jp: '告白', kana: 'こくはく', en: 'confession of love; declaration', pos: 'n', ex: { jp: '彼女に告白する勇気がない。', en: "I don't have the courage to confess to her." } },
+  { jp: '幼なじみ', kana: 'おさななじみ', en: 'childhood friend', pos: 'n', ex: { jp: '彼は幼なじみで、ずっと一緒だった。', en: "He's my childhood friend and we've always been together." } },
+  { jp: '転校生', kana: 'てんこうせい', en: 'transfer student; new student', pos: 'n', ex: { jp: '今日、転校生が来た。', en: "A transfer student came today." } },
+  { jp: '部活', kana: 'ぶかつ', en: 'club activities; after-school club', pos: 'n', ex: { jp: '部活の練習はきつい。', en: "Club practice is tough." } },
+  { jp: '先輩', kana: 'せんぱい', en: 'senior; upperclassman; mentor', pos: 'n', ex: { jp: '先輩に憧れている。', en: "I admire my senpai." } },
+  { jp: '後輩', kana: 'こうはい', en: 'junior; underclassman', pos: 'n', ex: { jp: '後輩の面倒を見る。', en: "I look after my juniors." } },
+  { jp: '委員長', kana: 'いいんちょう', en: 'class president; committee chair', pos: 'n', ex: { jp: '委員長として責任がある。', en: "I have responsibilities as class president." } },
+  { jp: '修行', kana: 'しゅぎょう', en: 'training; discipline; ascetic practice', pos: 'n', ex: { jp: '強くなるために修行を続ける。', en: "I continue training to get stronger." } },
+  { jp: 'つらい', kana: 'つらい', en: 'painful; hard; tough; bitter', pos: 'adj', ex: { jp: 'つらいけど、諦めない。', en: "It's tough, but I won't give up." } },
+  { jp: '悔しい', kana: 'くやしい', en: 'frustrating; regrettable; vexing', pos: 'adj', ex: { jp: '負けて悔しい！', en: "It's so frustrating to lose!" } },
+  { jp: '羨ましい', kana: 'うらやましい', en: 'envious; jealous; I envy you', pos: 'adj', ex: { jp: '君の力が羨ましい。', en: "I envy your power." } },
+  { jp: '恥ずかしい', kana: 'はずかしい', en: 'embarrassing; ashamed; shy', pos: 'adj', ex: { jp: 'そんな姿、恥ずかしい！', en: "That look is so embarrassing!" } },
+  { jp: '緊張', kana: 'きんちょう', en: 'nervousness; tension; being nervous', pos: 'n', ex: { jp: '緊張して声が震えた。', en: "I was so nervous my voice shook." } },
+  { jp: '本気', kana: 'ほんき', en: 'serious; in earnest; for real', pos: 'n', ex: { jp: '本気で戦う！', en: "I'm fighting for real!" } },
+  { jp: '意地', kana: 'いじ', en: 'stubbornness; pride; determination', pos: 'n', ex: { jp: '意地でも負けない。', en: "I won't lose out of sheer stubbornness." } },
+  { jp: '諦める', kana: 'あきらめる', en: 'to give up; to abandon; to resign oneself', pos: 'v', ex: { jp: '絶対に諦めない！', en: "I will absolutely never give up!" } },
+  { jp: '任せろ', kana: 'まかせろ', en: "leave it to me; I'll handle it", pos: 'exp', ex: { jp: '任せろ、俺が守る！', en: "Leave it to me, I'll protect you!" } },
+  { jp: '気にするな', kana: 'きにするな', en: "don't worry about it; never mind", pos: 'exp', ex: { jp: '気にするな、大したことじゃない。', en: "Don't worry about it, it's no big deal." } },
+  { jp: 'そういえば', kana: 'そういえば', en: 'come to think of it; by the way; speaking of which', pos: 'exp', ex: { jp: 'そういえば、昨日何があったの？', en: "Come to think of it, what happened yesterday?" } },
+  { jp: '実は', kana: 'じつは', en: 'actually; the truth is; in fact', pos: 'exp', ex: { jp: '実は、ずっと好きだった。', en: "Actually, I've always liked you." } },
+  { jp: '当然', kana: 'とうぜん', en: 'natural; obvious; of course', pos: 'adj', ex: { jp: '当然、助けるさ。', en: "Of course I'll help." } },
+  { jp: '余計な', kana: 'よけいな', en: 'unnecessary; uncalled for; meddling', pos: 'adj', ex: { jp: '余計なお世話だ。', en: "Mind your own business." } },
+  { jp: '一体', kana: 'いったい', en: 'what in the world; just what; on earth', pos: 'adv', ex: { jp: '一体、何が起きているんだ？', en: "What on earth is happening?" } },
+  { jp: '異世界', kana: 'いせかい', en: 'another world; parallel world', pos: 'n', ex: { jp: '気がついたら異世界にいた。', en: "When I came to, I was in another world." } },
+  { jp: '転生', kana: 'てんせい', en: 'reincarnation; rebirth', pos: 'n', ex: { jp: '転生して別の世界に生まれ変わった。', en: "I was reincarnated and reborn in another world." } },
+  { jp: '冒険者', kana: 'ぼうけんしゃ', en: 'adventurer; explorer', pos: 'n', ex: { jp: '冒険者ギルドに登録した。', en: "I registered at the adventurer's guild." } },
+  { jp: 'ギルド', kana: 'ぎるど', en: "guild; adventurer's guild", pos: 'n', ex: { jp: 'ギルドでクエストを受ける。', en: "I take quests at the guild." } },
+  { jp: 'スキル', kana: 'すきる', en: 'skill; ability; special power', pos: 'n', ex: { jp: '新しいスキルを習得した！', en: "I learned a new skill!" } },
+  { jp: 'ダンジョン', kana: 'だんじょん', en: 'dungeon; labyrinth', pos: 'n', ex: { jp: 'ダンジョンの最深部を目指す。', en: "We aim for the deepest level of the dungeon." } },
+  { jp: '最強', kana: 'さいきょう', en: 'strongest; most powerful', pos: 'adj', ex: { jp: '最強の剣士になりたい。', en: "I want to become the strongest swordsman." } },
+  { jp: '無敵', kana: 'むてき', en: 'invincible; unrivaled; unbeatable', pos: 'adj', ex: { jp: '俺はもう無敵だ！', en: "I'm invincible now!" } },
+  { jp: '伝説', kana: 'でんせつ', en: 'legend; legendary', pos: 'n', ex: { jp: '伝説の武器を手に入れた。', en: "I obtained the legendary weapon." } },
+  { jp: '葛藤', kana: 'かっとう', en: 'conflict; inner struggle; dilemma', pos: 'n', ex: { jp: '心の中で葛藤している。', en: "I'm struggling with inner conflict." } },
+  { jp: '覚醒', kana: 'かくせい', en: 'awakening; realization; arousal of power', pos: 'n', ex: { jp: '隠された力が覚醒した。', en: "My hidden power awakened." } },
+  { jp: '誓い', kana: 'ちかい', en: 'vow; oath; pledge', pos: 'n', ex: { jp: '君との誓いを守る。', en: "I'll keep the vow I made with you." } },
+  { jp: '絆', kana: 'きずな', en: 'bond; tie; connection between people', pos: 'n', ex: { jp: '私たちの絆は切れない。', en: "The bond between us cannot be broken." } },
+  { jp: '復讐', kana: 'ふくしゅう', en: 'revenge; vengeance', pos: 'n', ex: { jp: '復讐のために強くなる。', en: "I get stronger for revenge." } },
+  { jp: '裏切り', kana: 'うらぎり', en: 'betrayal; treachery', pos: 'n', ex: { jp: '仲間の裏切りはつらい。', en: "Betrayal by a companion is painful." } },
+  { jp: '犠牲', kana: 'ぎせい', en: 'sacrifice; victim; casualty', pos: 'n', ex: { jp: '誰も犠牲にしない！', en: "I won't sacrifice anyone!" } },
+  { jp: 'かっこいい', kana: 'かっこいい', en: 'cool; attractive; handsome', pos: 'adj', ex: { jp: 'あの技、かっこいい！', en: "That move is so cool!" } },
+  { jp: 'めんどくさい', kana: 'めんどくさい', en: "bothersome; troublesome; can't be bothered", pos: 'adj', ex: { jp: 'めんどくさい、やりたくない。', en: "Too much trouble, I don't want to do it." } },
+  { jp: 'ドキドキ', kana: 'どきどき', en: 'heart pounding; nervous; excited (mimetic)', pos: 'adv', ex: { jp: '彼女を見るとドキドキする。', en: "My heart pounds when I see her." } },
+  { jp: 'ワクワク', kana: 'わくわく', en: 'excited; thrilled; looking forward to (mimetic)', pos: 'adv', ex: { jp: '明日の試合がワクワクする。', en: "I'm excited about tomorrow's match." } },
+  { jp: 'どうせ', kana: 'どうせ', en: 'anyway; in any case; which way (resignation)', pos: 'adv', ex: { jp: 'どうせ、俺には無理だ。', en: "It's impossible for me anyway." } },
+  { jp: 'せっかく', kana: 'せっかく', en: "with much effort; since we're at it; taking the trouble", pos: 'adv', ex: { jp: 'せっかく来たんだから、楽しもう。', en: "Since we took the trouble to come, let's enjoy it." } },
+  { jp: 'ようやく', kana: 'ようやく', en: 'finally; at last; barely', pos: 'adv', ex: { jp: 'ようやく目標に近づいた。', en: "I finally got closer to my goal." } },
+  { jp: 'むしろ', kana: 'むしろ', en: 'rather; instead; if anything', pos: 'adv', ex: { jp: 'むしろ、こちらのほうが強い。', en: "If anything, this one is stronger." } },
+  { jp: '確かに', kana: 'たしかに', en: 'certainly; surely; indeed', pos: 'adv', ex: { jp: '確かに、お前の言う通りだ。', en: "You're certainly right." } },
+  { jp: '所詮', kana: 'しょせん', en: 'after all; in the end; ultimately', pos: 'adv', ex: { jp: '所詮、人間には無理だ。', en: "After all, it's impossible for humans." } },
+  { jp: '怪しい', kana: 'あやしい', en: 'suspicious; questionable; dubious', pos: 'adj', ex: { jp: 'あの人、なんか怪しい。', en: "That person seems somehow suspicious." } },
+  { jp: '懐かしい', kana: 'なつかしい', en: 'nostalgic; dear; missed', pos: 'adj', ex: { jp: '懐かしい場所に戻ってきた。', en: "I came back to a place I missed." } },
+  { jp: '眩しい', kana: 'まぶしい', en: 'dazzling; blinding; brilliant', pos: 'adj', ex: { jp: '君の笑顔が眩しい。', en: "Your smile is dazzling." } },
+  { jp: '頼もしい', kana: 'たのもしい', en: 'reliable; dependable; reassuring', pos: 'adj', ex: { jp: '頼もしい仲間がいる。', en: "I have dependable companions." } },
+  { jp: '甘い', kana: 'あまい', en: 'sweet; naive; lenient; optimistic', pos: 'adj', ex: { jp: '敵への判断が甘かった。', en: "My judgment of the enemy was too lenient." } },
+  { jp: '理不尽', kana: 'りふじん', en: 'unreasonable; absurd; unjust', pos: 'adj', ex: { jp: '理不尽な世界と戦う。', en: "I fight against an unjust world." } },
+  { jp: '執着', kana: 'しゅうちゃく', en: 'attachment; obsession; clinging to', pos: 'n', ex: { jp: '過去への執着を捨てる。', en: "I abandon my attachment to the past." } },
+  { jp: '気配', kana: 'けはい', en: 'presence; sign; indication; atmosphere', pos: 'n', ex: { jp: '誰かの気配を感じる。', en: "I sense someone's presence." } },
+  { jp: '直感', kana: 'ちょっかん', en: 'intuition; instinct; gut feeling', pos: 'n', ex: { jp: '直感を信じて行動する。', en: "I act on my intuition." } },
+  { jp: '全力', kana: 'ぜんりょく', en: "full power; all one's strength; maximum effort", pos: 'n', ex: { jp: '全力で立ち向かう！', en: "I'll face it with everything I've got!" } },
+  { jp: '奥義', kana: 'おうぎ', en: 'secret technique; ultimate move', pos: 'n', ex: { jp: '奥義を使う時が来た！', en: "The time has come to use my secret technique!" } },
+  { jp: '因縁', kana: 'いんねん', en: 'fate; connection; karma; bad blood', pos: 'n', ex: { jp: '我々の因縁はここで終わる。', en: "Our fateful connection ends here." } },
+  { jp: '執念', kana: 'しゅうねん', en: 'tenacity; obsession; dogged determination', pos: 'n', ex: { jp: '執念で目標を達成する。', en: "I'll achieve my goal through sheer tenacity." } },
+  { jp: '本望', kana: 'ほんもう', en: "one's true desire; what one really wants", pos: 'n', ex: { jp: 'これで本望だ。', en: "This is truly what I wanted." } },
+  { jp: '威圧', kana: 'いあつ', en: 'intimidation; coercion; pressure', pos: 'n', ex: { jp: '敵の威圧に負けない。', en: "I won't be intimidated by the enemy." } },
+  { jp: '覇気', kana: 'はき', en: 'ambition; spirit; fighting spirit; force', pos: 'n', ex: { jp: '彼には覇気がある。', en: "He has a powerful fighting spirit." } },
+  { jp: '因果', kana: 'いんが', en: 'cause and effect; karma; fate', pos: 'n', ex: { jp: '因果応報というものだ。', en: "This is cause and effect." } },
+  { jp: '打ち明ける', kana: 'うちあける', en: 'to confide; to reveal; to open up about', pos: 'v', ex: { jp: '秘密を打ち明ける。', en: "I'll confide my secret." } },
+  { jp: '見極める', kana: 'みきわめる', en: 'to ascertain; to see through; to discern', pos: 'v', ex: { jp: '敵の実力を見極める。', en: "I'll discern the enemy's true ability." } },
+  { jp: '踏み出す', kana: 'ふみだす', en: 'to step forward; to take the first step', pos: 'v', ex: { jp: '勇気を持って踏み出す。', en: "I step forward with courage." } },
+  { jp: '乗り越える', kana: 'のりこえる', en: 'to overcome; to get over; to surmount', pos: 'v', ex: { jp: 'どんな壁も乗り越える。', en: "I'll overcome any wall." } },
+  { jp: '引き受ける', kana: 'ひきうける', en: 'to take on; to accept; to undertake', pos: 'v', ex: { jp: 'その使命、引き受けた！', en: "I'll take on that mission!" } },
+  { jp: '成し遂げる', kana: 'なしとげる', en: 'to accomplish; to achieve; to carry through', pos: 'v', ex: { jp: '必ず成し遂げてみせる！', en: "I will definitely accomplish it!" } },
+  { jp: '立ち向かう', kana: 'たちむかう', en: 'to face; to confront; to stand up to', pos: 'v', ex: { jp: '恐怖に立ち向かう。', en: "I face my fear head-on." } },
+  { jp: '見捨てる', kana: 'みすてる', en: 'to abandon; to desert; to forsake', pos: 'v', ex: { jp: '仲間を見捨てない！', en: "I won't abandon my companions!" } },
+  { jp: '力を合わせる', kana: 'ちからをあわせる', en: 'to join forces; to cooperate; to unite strength', pos: 'exp', ex: { jp: '力を合わせて戦おう。', en: "Let's join forces and fight together." } },
+  { jp: '死にもの狂い', kana: 'しにものぐるい', en: "desperate struggle; fighting like one's life depends on it", pos: 'n', ex: { jp: '死にもの狂いで練習した。', en: "I practiced like my life depended on it." } },
+];
+</script>
+
+<script>
+// ── ANIME LISTENING ──────────────────────────────────────────────────────────
+window.ANIME_LISTENING = [
+  { id: 1, title: '転校生の初日', en_title: "Transfer Student's First Day", genre: 'school',
+    lines: [
+      { speaker: '先生', text: 'みなさん、今日から新しいクラスメートが来ました。' },
+      { speaker: '転校生', text: 'はじめまして。山田太郎です。よろしくお願いします！' },
+      { speaker: 'クラスメート', text: 'どこから来たの？' },
+      { speaker: '転校生', text: '東京から来ました。これからよろしくね。' },
+      { speaker: 'クラスメート', text: 'えっ、東京？かっこいい！うちのクラスへようこそ。' },
+      { speaker: '転校生', text: 'ありがとう。仲良くしてください。' },
+    ],
+    questions: [
+      { q: '転校生の名前は何ですか？', choices: ['山田太郎', '田中太郎', '鈴木太郎', '佐藤太郎'], ans: 0 },
+      { q: '転校生はどこから来ましたか？', choices: ['大阪', '東京', '名古屋', '福岡'], ans: 1 },
+    ]
+  },
+  { id: 2, title: '魔王との最終決戦', en_title: "Final Battle with the Demon King", genre: 'fantasy',
+    lines: [
+      { speaker: '魔王', text: 'とうとう来たか、勇者よ。覚悟はできているか？' },
+      { speaker: '勇者', text: '絶対に倒す！仲間のためにも、この世界のためにも！' },
+      { speaker: '魔王', text: 'ふん、その程度の力で私に勝てると思うか。' },
+      { speaker: '勇者', text: '見くびるな！これが本当の力だ！' },
+      { speaker: '魔王', text: 'ばかな…なぜこんなに強い…' },
+      { speaker: '勇者', text: '仲間の絆が私に力をくれた！' },
+    ],
+    questions: [
+      { q: '勇者はなぜ強くなれましたか？', choices: ['魔法のおかげ', '仲間の絆のおかげ', '特別なスキルのおかげ', '運がよかったから'], ans: 1 },
+      { q: '魔王はどんな様子でしたか？', choices: ['喜んでいた', '驚いていた', '笑っていた', '泣いていた'], ans: 1 },
+    ]
+  },
+  { id: 3, title: '告白の場面', en_title: "The Confession Scene", genre: 'romance',
+    lines: [
+      { speaker: '鈴木', text: 'あの、ちょっといい？' },
+      { speaker: '田中', text: 'え？何、急に？' },
+      { speaker: '鈴木', text: '実は…ずっと気になってたんだ。好きです！' },
+      { speaker: '田中', text: 'え？私が？…どきどきする。' },
+      { speaker: '鈴木', text: '返事は今じゃなくていい。考えてもらえる？' },
+      { speaker: '田中', text: '…うん。ありがとう、ちゃんと考える。' },
+    ],
+    questions: [
+      { q: '鈴木さんは何を伝えましたか？', choices: ['好きだという気持ち', '転校すること', '部活を辞めること', '友達になりたいこと'], ans: 0 },
+      { q: '田中さんはすぐ返事をしましたか？', choices: ['はい、すぐ答えた', 'いいえ、後で考えると言った', 'いいえ、断った', 'いいえ、怒った'], ans: 1 },
+    ]
+  },
+  { id: 4, title: '部活の特訓', en_title: "Special Club Training", genre: 'sports',
+    lines: [
+      { speaker: '先輩', text: 'また負けたか。何が悪いと思う？' },
+      { speaker: '後輩', text: '…練習が足りないんですか？' },
+      { speaker: '先輩', text: '練習量じゃない。気持ちだ。もっと本気でやれ！' },
+      { speaker: '後輩', text: 'でも、もう限界です…' },
+      { speaker: '先輩', text: '限界は超えるためにある。俺も最初はそう思ってた。' },
+      { speaker: '後輩', text: '先輩…わかりました。もう一度やります！' },
+    ],
+    questions: [
+      { q: '先輩によると、何が一番大切ですか？', choices: ['練習量', '気持ち', '体力', '技術'], ans: 1 },
+      { q: '後輩は最終的にどうしましたか？', choices: ['諦めた', 'もう一度頑張ることにした', '先輩に反論した', '泣いた'], ans: 1 },
+    ]
+  },
+  { id: 5, title: '異世界転生', en_title: "Isekai Reincarnation", genre: 'isekai',
+    lines: [
+      { speaker: '神様', text: 'あなたは不慮の事故で亡くなりました。' },
+      { speaker: '主人公', text: 'え？私、死んだんですか？' },
+      { speaker: '神様', text: '異世界に転生してもらいます。特別なスキルをあげましょう。' },
+      { speaker: '主人公', text: 'スキル？どんなスキルですか？' },
+      { speaker: '神様', text: '「万能翻訳」というスキルです。全ての言語がわかります。' },
+      { speaker: '主人公', text: 'なるほど。わかりました、頑張ります！' },
+    ],
+    questions: [
+      { q: '主人公はどうなりましたか？', choices: ['眠りについた', '事故で亡くなった', '異世界から来た', '神様になった'], ans: 1 },
+      { q: '主人公が受け取ったスキルは何ですか？', choices: ['万能翻訳', '透明化', '飛行', '戦闘強化'], ans: 0 },
+    ]
+  },
+  { id: 6, title: '仲間との別れ', en_title: "Farewell with Companions", genre: 'adventure',
+    lines: [
+      { speaker: 'ユキ', text: 'もう行くの？寂しいな。' },
+      { speaker: 'ケン', text: '俺の旅はまだ続く。でも、仲間がいたから来れた。' },
+      { speaker: 'ユキ', text: 'またいつか会えるよね？' },
+      { speaker: 'ケン', text: 'ああ、絶対また会おう。それまで元気でいてくれ。' },
+      { speaker: 'ユキ', text: 'うん…気をつけてね。' },
+      { speaker: 'ケン', text: 'お前もな。行ってくる！' },
+    ],
+    questions: [
+      { q: 'ケンはこれからどうしますか？', choices: ['ユキと一緒に留まる', '旅を続ける', '故郷に帰る', 'ギルドに入る'], ans: 1 },
+      { q: 'ケンはユキに何を頼みましたか？', choices: ['強くなること', '待っていること', '元気でいること', '旅に来ること'], ans: 2 },
+    ]
+  },
+  { id: 7, title: '修行の場面', en_title: "The Training Scene", genre: 'action',
+    lines: [
+      { speaker: '師匠', text: '今日も特訓だ。準備はいいか？' },
+      { speaker: '弟子', text: 'はい！全力でやります！' },
+      { speaker: '師匠', text: '甘い。それはまだ本気じゃない。' },
+      { speaker: '弟子', text: 'これ以上どうすれば…' },
+      { speaker: '師匠', text: '怒りや悲しみ、全ての感情を力に変えろ。それが真の強さだ。' },
+      { speaker: '弟子', text: '感情を…力に。わかりました、師匠！' },
+    ],
+    questions: [
+      { q: '師匠によると、真の強さとは何ですか？', choices: ['技術の完璧さ', '感情を力に変えること', 'たくさん練習すること', '敵を恐れないこと'], ans: 1 },
+      { q: '師匠は弟子の態度をどう評価しましたか？', choices: ['素晴らしい', 'まだ本気ではない', '十分だ', '諦めるべきだ'], ans: 1 },
+    ]
+  },
+  { id: 8, title: '文化祭の準備', en_title: "Cultural Festival Prep", genre: 'school',
+    lines: [
+      { speaker: '委員長', text: 'みんな聞いて！文化祭まであと三日しかない！' },
+      { speaker: 'クラスメートA', text: 'まだ看板ができてないよ！' },
+      { speaker: 'クラスメートB', text: '衣装も準備中です！' },
+      { speaker: '委員長', text: '落ち着いて！役割分担を確認しよう。文句は後にして、今は動くこと！' },
+      { speaker: 'クラスメートA', text: 'わかった。じゃあ俺が看板担当します！' },
+      { speaker: '委員長', text: 'ありがとう！絶対成功させよう！' },
+    ],
+    questions: [
+      { q: '文化祭まであと何日ですか？', choices: ['一日', '二日', '三日', '四日'], ans: 2 },
+      { q: 'クラスメートAは何を担当しますか？', choices: ['衣装', '看板', '音楽', '料理'], ans: 1 },
+    ]
+  },
+  { id: 9, title: 'ラスボス前の決意', en_title: "Resolve Before the Final Boss", genre: 'fantasy',
+    lines: [
+      { speaker: 'リナ', text: 'ここまで来たね。' },
+      { speaker: 'タロウ', text: 'ああ。あとは魔王だけだ。' },
+      { speaker: 'リナ', text: '怖くない？' },
+      { speaker: 'タロウ', text: '怖いさ。でも、ここで止まれない。' },
+      { speaker: 'リナ', text: '私も一緒に戦う。一人じゃないから。' },
+      { speaker: 'タロウ', text: '…ありがとう。行こう、一緒に。' },
+    ],
+    questions: [
+      { q: 'タロウは怖いと感じていますか？', choices: ['いいえ、全く怖くない', 'はい、でも止まれない', '少しだけ怖い', 'わからない'], ans: 1 },
+      { q: 'リナは何をすると言いましたか？', choices: ['待っている', '先に逃げる', '一緒に戦う', '魔王と話す'], ans: 2 },
+    ]
+  },
+  { id: 10, title: '幼なじみの再会', en_title: "Childhood Friend Reunion", genre: 'romance',
+    lines: [
+      { speaker: 'アキ', text: '久しぶり！全然変わってないね。' },
+      { speaker: 'ハルト', text: 'アキ？すごい、五年ぶりか。' },
+      { speaker: 'アキ', text: '大きくなったね。昔は私より小さかったのに。' },
+      { speaker: 'ハルト', text: 'それは言わないでよ。でも、またこうして会えてよかった。' },
+      { speaker: 'アキ', text: '私もずっと気になってたよ…実は。' },
+      { speaker: 'ハルト', text: 'えっ？それってどういう意味？' },
+    ],
+    questions: [
+      { q: '二人はどのくらい会っていませんでしたか？', choices: ['一年', '三年', '五年', '十年'], ans: 2 },
+      { q: 'アキは昔のハルトについて何と言いましたか？', choices: ['自分より背が高かった', '自分より背が低かった', '全く変わっていない', '声が高かった'], ans: 1 },
+    ]
+  },
+  { id: 11, title: '試合前の激励', en_title: "Pre-Match Pep Talk", genre: 'sports',
+    lines: [
+      { speaker: 'キャプテン', text: 'みんな、今日の相手は強い。でも俺たちだって負けない。' },
+      { speaker: 'チームメート', text: 'そうだ！諦めないぞ！' },
+      { speaker: 'キャプテン', text: '今まで一緒に練習してきた。その成果を見せよう。' },
+      { speaker: 'チームメート', text: 'うおおお！' },
+      { speaker: 'キャプテン', text: 'ただ一つだけ言う。楽しんでやれ。それだけだ。' },
+      { speaker: 'チームメート', text: 'はい！全力でやります！' },
+    ],
+    questions: [
+      { q: 'キャプテンが最後に言った大切なことは？', choices: ['絶対に勝つこと', '楽しんでやること', '練習の成果を出すこと', '相手を分析すること'], ans: 1 },
+      { q: 'チームメートの反応はどうでしたか？', choices: ['静かだった', '元気よく応えた', '不安そうだった', '反対した'], ans: 1 },
+    ]
+  },
+  { id: 12, title: '魔法の訓練', en_title: "Magic Training", genre: 'fantasy',
+    lines: [
+      { speaker: '魔法使い', text: 'まず呪文の意味を理解しなさい。言葉に魂を込めるんです。' },
+      { speaker: '見習い', text: '魂を込める…ですか。' },
+      { speaker: '魔法使い', text: 'そう。感情のないまじないはただの言葉よ。' },
+      { speaker: '見習い', text: 'じゃあ、怒りや愛も魔法の力になるの？' },
+      { speaker: '魔法使い', text: 'その通り。あなたの感情が魔法を強くする。' },
+      { speaker: '見習い', text: 'わかった！やってみます！' },
+    ],
+    questions: [
+      { q: '魔法を強くするものは何ですか？', choices: ['特別な道具', '感情', '長い練習', '師匠の許可'], ans: 1 },
+      { q: '感情のないまじないはどうなりますか？', choices: ['特別に強くなる', 'ただの言葉になる', '危険になる', '失敗する'], ans: 1 },
+    ]
+  },
+  { id: 13, title: '旅の仲間', en_title: "Travel Companions", genre: 'adventure',
+    lines: [
+      { speaker: 'マコト', text: 'この地図、どこで手に入れたの？' },
+      { speaker: 'リョウ', text: '冒険者ギルドで買ったよ。次の街まで二日かかるらしい。' },
+      { speaker: 'マコト', text: '途中で魔物が出るかも。' },
+      { speaker: 'リョウ', text: '大丈夫。俺たち、今まで何度ピンチを乗り越えてきたか。' },
+      { speaker: 'マコト', text: '確かに。じゃあ出発しようか。' },
+      { speaker: 'リョウ', text: 'ああ。冒険の続きだ！' },
+    ],
+    questions: [
+      { q: '地図はどこで手に入れましたか？', choices: ['お店', '冒険者ギルド', '村人から', '宝箱から'], ans: 1 },
+      { q: '次の街まで何日かかりますか？', choices: ['一日', '二日', '三日', '四日'], ans: 1 },
+    ]
+  },
+  { id: 14, title: '力の覚醒', en_title: "Awakening of Power", genre: 'action',
+    lines: [
+      { speaker: 'ライバル', text: 'お前にはもう勝ち目がない。諦めろ。' },
+      { speaker: '主人公', text: '…まだだ。まだ終わっていない。' },
+      { speaker: 'ライバル', text: 'ばかめ。その程度の力で！' },
+      { speaker: '主人公', text: 'みんなの声が聞こえる。力を貸してくれ！' },
+      { speaker: 'ライバル', text: 'なっ…この力は何だ！？' },
+      { speaker: '主人公', text: 'これが、本当の力だ！' },
+    ],
+    questions: [
+      { q: 'ライバルは主人公に何と言いましたか？', choices: ['頑張れ', '諦めろ', '逃げろ', '助けてくれ'], ans: 1 },
+      { q: '主人公はどうやって力を得ましたか？', choices: ['新しい技を思い出した', '魔法を使った', 'みんなの声を聞いた', '休憩した'], ans: 2 },
+    ]
+  },
+  { id: 15, title: '秘密の発覚', en_title: "A Secret Revealed", genre: 'mystery',
+    lines: [
+      { speaker: 'タナカ', text: '実は、ずっと隠してたことがある。' },
+      { speaker: 'ユミ', text: 'えっ？何を隠してたの？' },
+      { speaker: 'タナカ', text: '俺…この街の出身じゃないんだ。' },
+      { speaker: 'ユミ', text: 'どういうこと？' },
+      { speaker: 'タナカ', text: '本当のことを言う。俺は異世界から来たんだ。' },
+      { speaker: 'ユミ', text: 'え！？まじで！？' },
+    ],
+    questions: [
+      { q: 'タナカさんはどこから来ましたか？', choices: ['東京', '外国', '異世界', '別の星'], ans: 2 },
+      { q: 'タナカさんは今まで何をしていましたか？', choices: ['秘密を話していた', '秘密を隠していた', 'ユミに全部話していた', '街を案内していた'], ans: 1 },
+    ]
+  },
+  { id: 16, title: '先輩への相談', en_title: "Consulting with Senpai", genre: 'school',
+    lines: [
+      { speaker: '後輩', text: '先輩、相談があるんですが。' },
+      { speaker: '先輩', text: 'どうした？悩んでるのか？' },
+      { speaker: '後輩', text: '最近、部活が楽しくなくなってきて。' },
+      { speaker: '先輩', text: 'なるほどな。俺も昔そう思ったことがある。' },
+      { speaker: '後輩', text: 'どうやって乗り越えたんですか？' },
+      { speaker: '先輩', text: 'なぜ始めたか、思い出してみろ。それが答えだ。' },
+    ],
+    questions: [
+      { q: '後輩の悩みは何ですか？', choices: ['成績が悪い', '部活が楽しくない', '友達がいない', '先生が嫌い'], ans: 1 },
+      { q: '先輩のアドバイスは何ですか？', choices: ['休憩を取ること', '辞めること', '始めた理由を思い出すこと', '新しい趣味を見つけること'], ans: 2 },
+    ]
+  },
+  { id: 17, title: 'ライバルとの対話', en_title: "Dialogue with a Rival", genre: 'action',
+    lines: [
+      { speaker: 'ライバル', text: 'なぜお前と戦うと、強くなる気がするんだ。' },
+      { speaker: '主人公', text: 'それは俺も同じだ。お前がいるから頑張れる。' },
+      { speaker: 'ライバル', text: 'ふん。感傷的なことを言うな。' },
+      { speaker: '主人公', text: '認めろよ。俺たちは同じ目標を持ってる。' },
+      { speaker: 'ライバル', text: '…仮にそうだとして、だから何だ。' },
+      { speaker: '主人公', text: 'だから、今度こそ正々堂々と戦おう。' },
+    ],
+    questions: [
+      { q: 'ライバルは何を感じていますか？', choices: ['主人公が嫌いだ', '主人公と戦うと強くなる', '主人公が怖い', '主人公を尊敬している'], ans: 1 },
+      { q: '主人公はライバルに何を提案しましたか？', choices: ['友達になること', '一緒に旅すること', '正々堂々と戦うこと', '訓練すること'], ans: 2 },
+    ]
+  },
+  { id: 18, title: '夏祭りのデート', en_title: "Summer Festival Date", genre: 'romance',
+    lines: [
+      { speaker: 'アオイ', text: '浴衣、似合ってるね。' },
+      { speaker: 'ハナ', text: 'ありがとう！アオイ君こそ、かっこいい。' },
+      { speaker: 'アオイ', text: 'え、そんなこと言うから恥ずかしいよ。' },
+      { speaker: 'ハナ', text: '正直に言っただけ。あ、花火が始まるよ！' },
+      { speaker: 'アオイ', text: 'きれいだね。…本当に、きれいだ。' },
+      { speaker: 'ハナ', text: '花火見てよ！…でも、ありがとう。' },
+    ],
+    questions: [
+      { q: 'ハナは何を着ていますか？', choices: ['制服', '浴衣', 'ドレス', 'カジュアルな服'], ans: 1 },
+      { q: 'アオイが「きれいだ」と言ったのは何についてですか？', choices: ['花火だけ', 'ハナだけ', '花火とハナ両方', '祭りの飾り'], ans: 2 },
+    ]
+  },
+  { id: 19, title: 'ダンジョン探索', en_title: "Dungeon Exploration", genre: 'RPG',
+    lines: [
+      { speaker: 'メンバーA', text: '静かすぎる。何かいる気がする。' },
+      { speaker: 'メンバーB', text: '直感を信じよう。いつも当たってるから。' },
+      { speaker: 'メンバーA', text: 'でも慎重に行こう。罠があるかも。' },
+      { speaker: 'メンバーB', text: 'わかった。気をつけて進む。' },
+      { speaker: 'メンバーA', text: 'やっぱり来た！覚悟はいい？' },
+      { speaker: 'メンバーB', text: 'もちろん！かかってこい！' },
+    ],
+    questions: [
+      { q: 'メンバーAはダンジョンをどう感じていますか？', choices: ['楽しい', '安全だ', '何かいる気がする', '退屈だ'], ans: 2 },
+      { q: 'メンバーBの直感は信頼できますか？', choices: ['全く信頼できない', 'いつも当たっている', '時々外れる', 'わからない'], ans: 1 },
+    ]
+  },
+  { id: 20, title: '学園祭の舞台', en_title: "School Festival Stage", genre: 'school',
+    lines: [
+      { speaker: 'サクラ', text: '緊張してきた。' },
+      { speaker: 'レン', text: '大丈夫。ずっと練習してきたじゃないか。' },
+      { speaker: 'サクラ', text: 'でも、みんなの前で歌うのは初めてで。' },
+      { speaker: 'レン', text: '俺たちの歌を聞いてもらおう。それだけでいい。' },
+      { speaker: 'サクラ', text: '…うん、そうだね。一緒にやろう。' },
+      { speaker: 'レン', text: '行こう。最高の舞台にしよう！' },
+    ],
+    questions: [
+      { q: 'サクラはなぜ緊張していますか？', choices: ['練習不足', '初めて人前で歌うから', '声が出ないから', '舞台が怖いから'], ans: 1 },
+      { q: 'レンはどんな気持ちで舞台に立ちますか？', choices: ['緊張している', '自信満々', '前向きで励ます気持ち', '諦めている'], ans: 2 },
+    ]
+  },
+  { id: 21, title: '最後の戦い', en_title: "The Final Battle", genre: 'action',
+    lines: [
+      { speaker: 'タロウ', text: 'これが最後の戦いだ。絶対に勝つ。' },
+      { speaker: '仲間', text: '一人で行かないで。みんなで戦おう。' },
+      { speaker: 'タロウ', text: 'でも危険だ。' },
+      { speaker: '仲間', text: '仲間を危険から遠ざけようとするな。一緒に戦うのが仲間だ。' },
+      { speaker: 'タロウ', text: '…わかった。みんな、行くぞ！' },
+      { speaker: '仲間', text: 'うおおおお！' },
+    ],
+    questions: [
+      { q: 'タロウは最初どうしようとしましたか？', choices: ['一人で戦おうとした', '逃げようとした', '助けを求めた', '交渉しようとした'], ans: 0 },
+      { q: '仲間はタロウに何と言いましたか？', choices: ['待っていると言った', '一緒に戦うと言った', '先に行けと言った', '諦めろと言った'], ans: 1 },
+    ]
+  },
+  { id: 22, title: '成長の証', en_title: "Proof of Growth", genre: 'sports',
+    lines: [
+      { speaker: 'コーチ', text: '去年と比べて、見違えるほど上手くなった。' },
+      { speaker: '選手', text: 'ありがとうございます。毎日練習してきました。' },
+      { speaker: 'コーチ', text: 'その努力が実った。今日の試合、思い切りやってこい。' },
+      { speaker: '選手', text: 'はい。でも、プレッシャーを感じます。' },
+      { speaker: 'コーチ', text: 'プレッシャーを感じるのは、それだけ真剣だからだ。' },
+      { speaker: '選手', text: 'そう考えれば…よし、やります！' },
+    ],
+    questions: [
+      { q: 'コーチは選手の成長をどう評価しましたか？', choices: ['まだ十分ではない', '見違えるほど上手くなった', '普通の上達だ', '去年より悪い'], ans: 1 },
+      { q: 'プレッシャーを感じることは何を意味しますか？', choices: ['準備不足', '自信のなさ', '真剣に取り組んでいる', '諦めている'], ans: 2 },
+    ]
+  },
+];
+</script>
+
+<script type="text/babel">
+// ── RPG SYSTEM ───────────────────────────────────────────────────────────────
+const RPG_KEY = 'sumi.n3.rpg.v1';
+window.RPG = {
+  LEVELS: [0,100,250,450,700,1000,1400,1900,2500,3200,4000,5000,6200,7600,9200,11000,13000,15200,17600,20200],
+  TITLES: ['見習い','見習い','見習い','冒険者','冒険者','冒険者','剣士','剣士','剣士','魔法使い','魔法使い','魔法使い','勇者','勇者','英雄','英雄','英雄','伝説','伝説','伝説'],
+  MONSTERS: [['スライム','🟢'],['ゴブリン','👺'],['オーク','💪'],['ウルフ','🐺'],['スケルトン','💀'],['オーガ','👹'],['ドラゴン','🐉'],['リッチ','🧙'],['魔王の使者','⚔️'],['魔王','👑']],
+  load() { try { return JSON.parse(localStorage.getItem(RPG_KEY)||'null') || {level:1,xp:0,totalXP:0,hp:100,maxHp:100,lastHpRegen:Date.now(),totalCorrect:0,totalWrong:0,sessionCorrect:0,sessionWrong:0}; } catch { return {level:1,xp:0,totalXP:0,hp:100,maxHp:100,lastHpRegen:Date.now(),totalCorrect:0,totalWrong:0,sessionCorrect:0,sessionWrong:0}; } },
+  save(d) { localStorage.setItem(RPG_KEY,JSON.stringify(d)); },
+  levelFromXP(totalXP) { for(let i=window.RPG.LEVELS.length-1;i>=0;i--) { if(totalXP>=window.RPG.LEVELS[i]) return i+1; } return 1; },
+  xpForNext(level) { return window.RPG.LEVELS[Math.min(level,window.RPG.LEVELS.length-1)]||99999; },
+  xpForLevel(level) { return window.RPG.LEVELS[Math.max(0,level-1)]||0; },
+  monsterForCard(srsEntry) { if(!srsEntry) return window.RPG.MONSTERS[0]; if(srsEntry.lapses>=3) return window.RPG.MONSTERS[9]; if(srsEntry.ef<1.8) return window.RPG.MONSTERS[6]; if(srsEntry.ef<2.0) return window.RPG.MONSTERS[4]; const idx=Math.min(3,Math.floor((srsEntry.ivl||1)/14)); return window.RPG.MONSTERS[idx]; },
+  applyGrade(data,grade) {
+    const xpMap={easy:30,good:20,hard:10,again:0};
+    const xpGain=xpMap[grade]||0;
+    const hpCost=grade==='again'?15:0;
+    const now=Date.now();
+    const regenMins=Math.floor((now-(data.lastHpRegen||now))/60000);
+    if(regenMins>0) { data.hp=Math.min(data.maxHp||100,(data.hp||100)+regenMins); data.lastHpRegen=now; }
+    data.totalXP=(data.totalXP||0)+xpGain;
+    data.hp=Math.max(0,(data.hp||100)-hpCost);
+    data.level=window.RPG.levelFromXP(data.totalXP);
+    if(grade==='again') { data.totalWrong=(data.totalWrong||0)+1; data.sessionWrong=(data.sessionWrong||0)+1; }
+    else { data.totalCorrect=(data.totalCorrect||0)+1; data.sessionCorrect=(data.sessionCorrect||0)+1; }
+    return data;
+  },
+};
+
+// ── RPG QUEST COMPONENT ───────────────────────────────────────────────────────
+const RPGQuest = () => {
+  const [rpg, setRpg] = uS2(() => window.RPG.load());
+  const [srs, setSrs] = uS2(() => SRS.load());
+  const [deck, setDeck] = uS2('n3');
+  const [revealed, setRevealed] = uS2(false);
+  const [tick, setTick] = uS2(0);
+  const [levelUp, setLevelUp] = uS2(null);
+  const [floats, setFloats] = uS2([]);
+  const [tab, setTab] = uS2('battle');
+  const addFloat = (msg, color) => {
+    const id = Date.now();
+    setFloats(f => [...f, { id, msg, color }]);
+    setTimeout(() => setFloats(f => f.filter(x => x.id !== id)), 1400);
+  };
+  const pool = deck === 'anime' ? (window.ANIME_VOCAB||[]) : (window.N3_VOCAB||[]);
+  const nowMs = Date.now();
+  const queue = uM2(() => {
+    const due = pool.map(c => ({c, s: srs[c.jp]})).filter(x => x.s && x.s.due <= nowMs).sort((a,b) => a.s.due - b.s.due);
+    const newCards = pool.map(c => ({c, s: srs[c.jp]})).filter(x => !srs[x.c.jp]);
+    return [...due, ...newCards];
+  }, [pool, srs, tick]);
+  const current = queue[0];
+  const monster = current ? window.RPG.monsterForCard(srs[current.c.jp]) : null;
+  const totalXP = rpg.totalXP || 0;
+  const level = rpg.level || 1;
+  const title = window.RPG.TITLES[Math.min(level-1, window.RPG.TITLES.length-1)];
+  const nextXP = window.RPG.xpForNext(level);
+  const prevXP = window.RPG.xpForLevel(level);
+  const xpInLevel = totalXP - prevXP;
+  const xpNeeded = nextXP - prevXP;
+  const xpPct = Math.min(1, xpInLevel / xpNeeded);
+  const hpPct = Math.min(1, (rpg.hp||100) / (rpg.maxHp||100));
+  const grade = (g) => {
+    const prevLevel = rpg.level;
+    const newSrs = { ...srs, [current.c.jp]: SRS.apply(srs[current.c.jp], g) };
+    SRS.save(newSrs); setSrs(newSrs);
+    const newRpg = window.RPG.applyGrade({ ...rpg }, g);
+    window.RPG.save(newRpg); setRpg(newRpg);
+    const xpGain = {easy:30,good:20,hard:10,again:0}[g];
+    if (xpGain > 0) addFloat(`+${xpGain} XP`, '#f5c518');
+    if (g === 'again') addFloat('-15 HP', '#e74c3c');
+    if (newRpg.level > prevLevel) setLevelUp({ from: prevLevel, to: newRpg.level });
+    setRevealed(false); setTick(t => t+1);
+    window.SumiStats && window.SumiStats.touch();
+  };
+  uE2(() => {
+    if (!levelUp) return;
+    const t = setTimeout(() => setLevelUp(null), 3500);
+    return () => clearTimeout(t);
+  }, [levelUp]);
+  uE2(() => {
+    const h = (e) => {
+      if (tab !== 'battle') return;
+      if (!current) return;
+      if (e.key === ' ') { e.preventDefault(); setRevealed(r => !r); }
+      if (revealed) {
+        if (e.key === '1') grade('again');
+        if (e.key === '2') grade('hard');
+        if (e.key === '3') grade('good');
+        if (e.key === '4') grade('easy');
+      }
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [tab, current, revealed, srs, rpg]);
+
+  const battleScreen = () => {
+    if (!current) return (
+      <div style={{textAlign:'center',padding:'60px 20px'}}>
+        <div style={{fontSize:60,marginBottom:16}}>🏆</div>
+        <div style={{fontSize:24,fontWeight:700,color:'var(--moss)',marginBottom:8}}>全クリ！</div>
+        <div style={{color:'var(--ink-3)'}}>本日のカードを全て完了しました</div>
+        <div style={{marginTop:24,color:'var(--ink-3)',fontSize:14}}>本日: {rpg.sessionCorrect||0}勝 {rpg.sessionWrong||0}敗</div>
+      </div>
+    );
+    return (
+      <div style={{display:'flex',flexDirection:'column',gap:12,position:'relative'}}>
+        {floats.map(f => (
+          <div key={f.id} style={{position:'fixed',top:'40%',left:'50%',transform:'translateX(-50%)',fontSize:24,fontWeight:900,color:f.color,pointerEvents:'none',zIndex:9999,animation:'fadeUp 1.4s ease forwards'}}>{f.msg}</div>
+        ))}
+        <div style={{background:'linear-gradient(135deg,#1a1a2e,#16213e)',borderRadius:16,padding:20,border:'2px solid #f5c518',position:'relative'}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:16}}>
+            <div style={{color:'#f5c518',fontSize:12,fontWeight:700}}>⚔️ 敵が現れた！</div>
+            <div style={{color:'var(--ink-3)',fontSize:12}}>残り {queue.length} 体</div>
+          </div>
+          <div style={{textAlign:'center',marginBottom:12}}>
+            <div style={{fontSize:48}}>{monster?.[1]||'👺'}</div>
+            <div style={{color:'#f5c518',fontSize:16,fontWeight:700}}>{monster?.[0]||'ゴブリン'}</div>
+          </div>
+          <div style={{textAlign:'center',background:'rgba(255,255,255,0.05)',borderRadius:12,padding:'20px 16px'}}>
+            <div style={{fontSize:52,fontWeight:900,color:'#fff',marginBottom:8}}>{current.c.jp}</div>
+            {current.c.kana && current.c.jp !== current.c.kana && (
+              <div style={{fontSize:16,color:'rgba(255,255,255,0.6)',marginBottom:4}}>{current.c.kana}</div>
+            )}
+            <div style={{fontSize:13,color:'rgba(255,255,255,0.4)'}}>{current.c.pos}</div>
+            <button onClick={() => window.speakJP(current.c.jp)} style={{marginTop:8,background:'rgba(255,255,255,0.1)',border:'none',borderRadius:8,color:'rgba(255,255,255,0.7)',padding:'6px 14px',cursor:'pointer',fontSize:13}}>🔊 hear</button>
+          </div>
+          {!revealed ? (
+            <button onClick={() => setRevealed(true)} style={{marginTop:16,width:'100%',background:'#f5c518',border:'none',borderRadius:12,color:'#1a1a2e',padding:'14px',fontWeight:900,fontSize:16,cursor:'pointer'}}>⚔️ 攻撃する！[SPACE]</button>
+          ) : (
+            <div>
+              <div style={{background:'rgba(255,255,255,0.08)',borderRadius:12,padding:16,marginTop:12,textAlign:'center'}}>
+                <div style={{color:'#e8d5b7',fontSize:18,fontWeight:600,marginBottom:4}}>{current.c.en}</div>
+                {current.c.ex && <div style={{color:'rgba(255,255,255,0.5)',fontSize:13,marginTop:8}}>{current.c.ex.jp} — <em>{current.c.ex.en}</em></div>}
+              </div>
+              <div style={{display:'flex',gap:8,marginTop:12}}>
+                <button onClick={() => grade('again')} style={{flex:1,background:'#8b0000',border:'2px solid #c0392b',borderRadius:10,color:'#fff',padding:'12px 6px',fontWeight:700,fontSize:13,cursor:'pointer'}}>💨 逃げる<br/><span style={{fontSize:10,opacity:0.7}}>Again [1]</span></button>
+                <button onClick={() => grade('hard')} style={{flex:1,background:'#1a3a5c',border:'2px solid #2980b9',borderRadius:10,color:'#fff',padding:'12px 6px',fontWeight:700,fontSize:13,cursor:'pointer'}}>🗡 弱攻撃<br/><span style={{fontSize:10,opacity:0.7}}>Hard [2]</span></button>
+                <button onClick={() => grade('good')} style={{flex:1,background:'#1a5c1a',border:'2px solid #27ae60',borderRadius:10,color:'#fff',padding:'12px 6px',fontWeight:700,fontSize:13,cursor:'pointer'}}>⚔️ 攻撃！<br/><span style={{fontSize:10,opacity:0.7}}>Good [3]</span></button>
+                <button onClick={() => grade('easy')} style={{flex:1,background:'#5c3d00',border:'2px solid #f5c518',borderRadius:10,color:'#f5c518',padding:'12px 6px',fontWeight:700,fontSize:13,cursor:'pointer'}}>✨ 必殺技！<br/><span style={{fontSize:10,opacity:0.7}}>Easy [4]</span></button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const masteredCount = pool.filter(c => { const s = srs[c.jp]; return s && s.ivl >= 21; }).length;
+  const learnedCount = pool.filter(c => !!srs[c.jp]).length;
+
+  const arsenalScreen = () => (
+    <div>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:12,marginBottom:16}}>
+        {[{label:'習得済み',value:masteredCount,color:'#f5c518'},{label:'学習中',value:learnedCount,color:'#3498db'},{label:'未学習',value:pool.length-learnedCount,color:'var(--ink-3)'}].map(s => (
+          <div key={s.label} style={{background:'linear-gradient(135deg,#1a1a2e,#16213e)',border:'1px solid #333',borderRadius:12,padding:16,textAlign:'center'}}>
+            <div style={{fontSize:28,fontWeight:900,color:s.color}}>{s.value}</div>
+            <div style={{fontSize:12,color:'rgba(255,255,255,0.5)',marginTop:4}}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{background:'linear-gradient(135deg,#1a1a2e,#16213e)',border:'1px solid #333',borderRadius:12,padding:16}}>
+        <div style={{color:'#f5c518',fontWeight:700,marginBottom:12}}>📊 冒険の記録</div>
+        {[['総正解数',rpg.totalCorrect||0],['総不正解数',rpg.totalWrong||0],['総獲得XP',rpg.totalXP||0],['称号',title]].map(([k,v]) => (
+          <div key={k} style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid rgba(255,255,255,0.08)',padding:'8px 0',color:'rgba(255,255,255,0.8)',fontSize:14}}>
+            <span>{k}</span><span style={{fontWeight:700,color:'#f5c518'}}>{v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{maxWidth:640,margin:'0 auto',padding:'16px 0'}}>
+      <style>{`@keyframes fadeUp{0%{opacity:1;transform:translateX(-50%) translateY(0)}100%{opacity:0;transform:translateX(-50%) translateY(-60px)}}`}</style>
+      {levelUp && (
+        <div style={{position:'fixed',inset:0,display:'flex',alignItems:'center',justifyContent:'center',background:'rgba(0,0,0,0.85)',zIndex:10000}}>
+          <div style={{textAlign:'center',color:'#f5c518'}}>
+            <div style={{fontSize:60}}>⬆️</div>
+            <div style={{fontSize:36,fontWeight:900,marginBottom:8}}>レベルアップ！</div>
+            <div style={{fontSize:20}}>Lv.{levelUp.from} → Lv.{levelUp.to}</div>
+            <div style={{fontSize:16,marginTop:8,color:'rgba(255,200,0,0.7)'}}>{window.RPG.TITLES[Math.min(levelUp.to-1,window.RPG.TITLES.length-1)]}</div>
+          </div>
+        </div>
+      )}
+      <div style={{background:'linear-gradient(135deg,#1a1a2e,#16213e)',borderRadius:16,padding:16,marginBottom:16,border:'2px solid #333'}}>
+        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:12}}>
+          <div style={{width:56,height:56,borderRadius:12,background:'linear-gradient(135deg,#f5c518,#e67e22)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:900,color:'#1a1a2e',flexShrink:0}}>勇</div>
+          <div style={{flex:1}}>
+            <div style={{color:'#f5c518',fontWeight:900,fontSize:16}}>{title} Lv.{level}</div>
+            <div style={{color:'rgba(255,255,255,0.5)',fontSize:12}}>XP: {rpg.totalXP||0}</div>
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:4,width:140}}>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'rgba(255,255,255,0.6)'}}>
+              <span>HP</span><span style={{color:'#e74c3c'}}>{rpg.hp||100}/{rpg.maxHp||100}</span>
+            </div>
+            <div style={{height:8,background:'rgba(255,255,255,0.1)',borderRadius:4,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${hpPct*100}%`,background:'linear-gradient(90deg,#e74c3c,#c0392b)',borderRadius:4,transition:'width 0.4s'}} />
+            </div>
+            <div style={{display:'flex',justifyContent:'space-between',fontSize:11,color:'rgba(255,255,255,0.6)'}}>
+              <span>XP</span><span style={{color:'#f5c518'}}>{xpInLevel}/{xpNeeded}</span>
+            </div>
+            <div style={{height:8,background:'rgba(255,255,255,0.1)',borderRadius:4,overflow:'hidden'}}>
+              <div style={{height:'100%',width:`${xpPct*100}%`,background:'linear-gradient(90deg,#f5c518,#e67e22)',borderRadius:4,transition:'width 0.4s'}} />
+            </div>
+          </div>
+        </div>
+        <div style={{display:'flex',gap:6}}>
+          {['battle','arsenal'].map(t => (
+            <button key={t} onClick={() => setTab(t)} style={{flex:1,background:tab===t?'#f5c518':'rgba(255,255,255,0.05)',color:tab===t?'#1a1a2e':'rgba(255,255,255,0.6)',border:'none',borderRadius:8,padding:'8px',fontWeight:700,fontSize:13,cursor:'pointer'}}>
+              {t==='battle'?'⚔️ バトル':'🏆 記録'}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{display:'flex',gap:8,marginBottom:16}}>
+        {[['n3','N3 語彙'],['anime','アニメ語彙']].map(([id,label]) => (
+          <button key={id} onClick={() => {setDeck(id);setTick(t=>t+1);}} style={{flex:1,background:deck===id?'var(--indigo)':'var(--card)',color:deck===id?'#fff':'var(--ink-3)',border:`1px solid ${deck===id?'var(--indigo)':'var(--line)'}`,borderRadius:10,padding:'8px',fontWeight:600,fontSize:13,cursor:'pointer'}}>{label}</button>
+        ))}
+      </div>
+      {tab==='battle' ? battleScreen() : arsenalScreen()}
+    </div>
+  );
+};
+
+// ── ANIME LISTENING COMPONENT ─────────────────────────────────────────────────
+const AnimeListening = () => {
+  const scenes = window.ANIME_LISTENING || [];
+  const [idx, setIdx] = uS2(0);
+  const [playing, setPlaying] = uS2(-1);
+  const [qAnswers, setQAnswers] = uS2({});
+  const [autoPlay, setAutoPlay] = uS2(false);
+  const autoRef = uR2(null);
+  const scene = scenes[idx];
+  const GENRE_COLORS = {school:'#3498db',romance:'#e91e63',fantasy:'#9b59b6',action:'#e67e22',sports:'#27ae60',adventure:'#16a085',isekai:'#8e44ad',mystery:'#2c3e50',RPG:'#f5c518'};
+  const speak = (text, i) => {
+    window.speechSynthesis && window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ja-JP'; u.rate = 0.85;
+    u.onend = () => {
+      setPlaying(-1);
+      if (autoRef.current && i < scene.lines.length - 1) {
+        setTimeout(() => { setPlaying(i+1); speak(scene.lines[i+1].text, i+1); }, 600);
+      } else if (autoRef.current) { autoRef.current = false; setAutoPlay(false); }
+    };
+    setPlaying(i);
+    window.speechSynthesis.speak(u);
+  };
+  const startAutoPlay = () => { autoRef.current = true; setAutoPlay(true); speak(scene.lines[0].text, 0); };
+  const stopAutoPlay = () => { autoRef.current = false; setAutoPlay(false); window.speechSynthesis && window.speechSynthesis.cancel(); setPlaying(-1); };
+  uE2(() => { stopAutoPlay(); setQAnswers({}); setPlaying(-1); }, [idx]);
+  const speakerColors = uM2(() => {
+    const map = {}; let ci = 0;
+    const palette = ['#3498db','#e91e63','#27ae60','#e67e22','#9b59b6'];
+    (scene?.lines||[]).forEach(l => { if (!map[l.speaker]) { map[l.speaker] = palette[ci%palette.length]; ci++; } });
+    return map;
+  }, [scene]);
+  return (
+    <div style={{display:'flex',gap:0,height:'calc(100vh - 120px)',overflow:'hidden'}}>
+      <div style={{width:220,flexShrink:0,overflowY:'auto',borderRight:'1px solid var(--line)',paddingRight:8}}>
+        <div style={{fontWeight:700,fontSize:13,color:'var(--ink-3)',marginBottom:12,paddingLeft:4}}>アニメ会話 {scenes.length}話</div>
+        {scenes.map((s,i) => (
+          <div key={s.id} onClick={() => setIdx(i)} style={{padding:'10px 12px',marginBottom:4,borderRadius:10,cursor:'pointer',background:i===idx?'var(--indigo)':'transparent',color:i===idx?'#fff':'var(--ink)',border:i===idx?'none':'1px solid transparent'}}>
+            <div style={{fontSize:13,fontWeight:i===idx?700:400}}>{s.title}</div>
+            <div style={{fontSize:11,marginTop:2,color:i===idx?'rgba(255,255,255,0.7)':'var(--ink-3)'}}>{s.en_title}</div>
+            <span style={{fontSize:10,background:GENRE_COLORS[s.genre]||'#666',color:'#fff',borderRadius:4,padding:'1px 6px',marginTop:4,display:'inline-block'}}>{s.genre}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{flex:1,overflowY:'auto',padding:'0 16px'}}>
+        {scene && (
+          <div>
+            <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16,paddingTop:4}}>
+              <span style={{fontSize:20,fontWeight:900}}>{scene.title}</span>
+              <span style={{fontSize:12,color:'var(--ink-3)',fontStyle:'italic'}}>{scene.en_title}</span>
+              <span style={{fontSize:11,background:GENRE_COLORS[scene.genre]||'#666',color:'#fff',borderRadius:4,padding:'2px 8px'}}>{scene.genre}</span>
+              <button onClick={autoPlay?stopAutoPlay:startAutoPlay} style={{marginLeft:'auto',background:autoPlay?'var(--indigo)':'var(--card)',color:autoPlay?'#fff':'var(--ink-3)',border:'1px solid var(--line)',borderRadius:8,padding:'6px 14px',cursor:'pointer',fontSize:13}}>
+                {autoPlay?'⏹ Stop':'▶ 全部再生'}
+              </button>
+            </div>
+            <div style={{display:'flex',flexDirection:'column',gap:10,marginBottom:24}}>
+              {scene.lines.map((line,i) => {
+                const isLeft = i%2===0;
+                const color = speakerColors[line.speaker]||'#888';
+                return (
+                  <div key={i} style={{display:'flex',flexDirection:isLeft?'row':'row-reverse',alignItems:'flex-end',gap:8}}>
+                    <div style={{width:36,height:36,borderRadius:'50%',background:color,display:'flex',alignItems:'center',justifyContent:'center',fontSize:13,color:'#fff',fontWeight:700,flexShrink:0}}>{line.speaker[0]}</div>
+                    <div style={{maxWidth:'75%'}}>
+                      <div style={{fontSize:11,color:'var(--ink-3)',marginBottom:3,textAlign:isLeft?'left':'right'}}>{line.speaker}</div>
+                      <div style={{background:isLeft?'var(--card)':'var(--indigo)',color:isLeft?'var(--ink)':'#fff',borderRadius:isLeft?'0 14px 14px 14px':'14px 0 14px 14px',padding:'10px 14px',fontSize:15,lineHeight:1.5,border:isLeft?'1px solid var(--line)':'none'}}>
+                        {line.text}
+                      </div>
+                    </div>
+                    <button onClick={() => { if(playing===i){window.speechSynthesis&&window.speechSynthesis.cancel();setPlaying(-1);}else speak(line.text,i); }} style={{background:'transparent',border:'none',cursor:'pointer',padding:4,color:playing===i?'var(--indigo)':'var(--ink-3)',fontSize:18}}>
+                      {playing===i?'⏸':'🔊'}
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+            {scene.questions && scene.questions.length > 0 && (
+              <div style={{borderTop:'1px solid var(--line)',paddingTop:16}}>
+                <div style={{fontWeight:700,marginBottom:12,color:'var(--ink-3)',fontSize:13}}>📝 理解確認</div>
+                {scene.questions.map((q,qi) => (
+                  <div key={qi} style={{marginBottom:16}}>
+                    <div style={{fontWeight:600,marginBottom:8}}>{qi+1}. {q.q}</div>
+                    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:6}}>
+                      {q.choices.map((c,ci) => {
+                        const ans = qAnswers[qi];
+                        const chosen = ans === ci;
+                        const correct = ci === q.ans;
+                        const show = ans !== undefined;
+                        return (
+                          <button key={ci} onClick={() => ans===undefined && setQAnswers(a => ({...a,[qi]:ci}))} style={{textAlign:'left',padding:'8px 12px',borderRadius:8,border:`1px solid ${show?(correct?'var(--moss)':chosen?'#e74c3c':'var(--line)'):'var(--line)'}`,background:show?(correct?'rgba(39,174,96,0.1)':chosen?'rgba(231,76,60,0.1)':'transparent'):'var(--card)',color:'var(--ink)',cursor:ans===undefined?'pointer':'default',fontSize:13}}>
+                            {['A','B','C','D'][ci]}. {c} {show&&correct?' ✓':''}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+</script>
+
 <!-- ── APP (root) ── -->
 <script type="text/babel">
 const { useState: useS, useEffect: useE } = React;
@@ -3354,6 +4103,8 @@ const NAV = [
   { id: 'mock',      label: 'Mock test',        glyph: '模', badge: 'N3' },
   { id: 'audioquiz', label: 'Audio quiz',        glyph: '耳', badge: 'NEW' },
   { id: 'bookmarks', label: 'Bookmarks',         glyph: '星', badge: '' },
+  { id: 'rpg',       label: 'RPG Quest',         glyph: '剣', badge: 'NEW' },
+  { id: 'anime',     label: 'Anime',             glyph: '声', badge: 'NEW' },
   { id: 'import',    label: 'Import / export',   glyph: '入', badge: '' }
 ];
 
@@ -3403,6 +4154,8 @@ const App = () => {
     mock:      <Mock />,
     audioquiz: <AudioQuiz />,
     bookmarks: <Bookmarks />,
+    rpg:       <RPGQuest />,
+    anime:     <AnimeListening />,
     import:    <ImportExport />
   };
 
